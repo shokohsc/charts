@@ -16,4 +16,7 @@ spec:
       image: busybox
       command: ['nc']
       args: ['-v', '-z', '{{ include "commander.fullname" . }}', '{{ .Values.service.port }}']
+    - name: curl
+      image: curlimages/curl
+      args: ['-LIX', 'GET', '{{ include "commander.fullname" . }}:{{ .Values.service.port }}']
   restartPolicy: Never
