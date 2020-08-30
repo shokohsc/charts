@@ -8,6 +8,10 @@ metadata:
     "helm.sh/hook": test-success
 spec:
   containers:
+    - name: resolv-conf
+      image: busybox
+      command: ['cat']
+      args: ['/etc/resolv.conf']
     - name: nc
       image: busybox
       command: ['nc']

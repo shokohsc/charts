@@ -12,11 +12,6 @@ jobs:
       - name: Fetch history
         run: git fetch --prune --unshallow
 
-      - name: NFS client package
-        uses: mstksg/get-package@v1
-        with:
-          apt-get: "nfs-common"
-
       - name: Run chart-testing (lint)
         id: lint
         uses: helm/chart-testing-action@v1.0.0
