@@ -7,14 +7,9 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    {{- range $name, $config := .Values.ports }}
-    - port: {{ default $config.port $config.exposedPort }}
-      name: {{ $name }}
-      targetPort: {{ $name | quote }}
-      protocol: {{ default "TCP" $config.protocol | quote }}
-      {{- if $config.nodePort }}
-      nodePort: {{ $config.nodePort }}
-      {{- end }}
-    {{- end }}
+    - port: {{ .Values.service.port }}
+      targetPort: nfs
+      protocol: TCP
+      name: nfs
   selector:
     {{- include "nfs.selectorLabels" . | nindent 4 }}

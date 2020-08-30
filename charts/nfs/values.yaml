@@ -2,33 +2,43 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# replicaCount -- The number of replica pods 0-n
 replicaCount: 1
 
 image:
+  # image.repository -- Container project image
   repository: shokohsc/volume-nfs
+  # image.pullPolicy -- Kubernetes pull policy image
   pullPolicy: Always
   # Overrides the image tag whose default is the chart version.
   # tag: v0.0.2
 
+# imagePullSecrets -- Registry pull secrets
 imagePullSecrets: []
+# nameOverride -- Release name override
 nameOverride: ""
+# fullnameOverride -- Release name override (full)
 fullnameOverride: ""
 
 serviceAccount:
-  # Specifies whether a service account should be created
+  # serviceAccount.create -- Specifies whether a service account should be created
   create: false
-  # Annotations to add to the service account
+  # serviceAccount.annotations -- Annotations to add to the service account
   annotations: {}
-  # The name of the service account to use.
+  # serviceAccount.name -- The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
+# podAnnotations -- Annotations to add to the pod
 podAnnotations: {}
 
+# podSecurityContext -- securityContext to add to the pod
 podSecurityContext: {}
   # fsGroup: 2000
 
+# securityContext -- securityContext & capabilities to add to the pod
 securityContext:
+  # securityContext.privileged -- add privileged (full capabilities) to the nfs server
   privileged: true
   # capabilities:
   #   drop:
@@ -37,6 +47,7 @@ securityContext:
   # runAsNonRoot: true
   # runAsUser: 1000
 
+# volumes -- Volumes to add to the pod
 volumes: []
   # example:
   # - name: exports
@@ -46,28 +57,29 @@ volumes: []
   #   path: /mnt
 
 service:
+  # service.type -- Service type
   type: ClusterIP
+  # service.port -- Service port
   port: 2049
 
-ports:
-  nfs:
-    port: 2049
-    expose: true
-    exposedPort: 2049
-
 ingress:
+  # ingress.enabled -- Specifies whether an ingress should be created
   enabled: false
+  # ingress.annotations -- Annotations to add to the ingress
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
+  # ingress.hosts -- Ingress rules
   hosts:
     - host: chart-example.local
       paths: []
+  # ingress.tls -- Ingress certificates
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
 
+# resources -- Resources to define on the pod
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
@@ -81,16 +93,23 @@ resources: {}
   #   memory: 128Mi
 
 autoscaling:
+  # autoscaling.enabled -- Specifies whether autoscaling should be enabled
   enabled: false
+  # autoscaling.minReplicas -- Minimum replicas
   minReplicas: 1
+  # autoscaling.maxReplicas -- Maximum replicas
   maxReplicas: 100
+  # autoscaling.targetCPUUtilizationPercentage -- threshold to activate autoscaling
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
+# nodeSelector -- Pod nodeSelector labels
 nodeSelector: {}
 
+# tolerations -- Pod tolerations
 tolerations: []
 
+# affinity -- Pod affinity
 affinity: {}
 
 daemonset:
