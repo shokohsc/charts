@@ -21,12 +21,6 @@ A Helm chart for Kubernetes
 | autoscaling.maxReplicas | int | `100` | Maximum replicas |
 | autoscaling.minReplicas | int | `1` | Minimum replicas |
 | autoscaling.targetCPUUtilizationPercentage | int | `80` | threshold to activate autoscaling |
-| daemonset.env[0].name | string | `"DRY_RUN"` |  |
-| daemonset.env[0].value | string | `"true"` |  |
-| daemonset.image.pullPolicy | string | `"IfNotPresent"` |  |
-| daemonset.image.repository | string | `"tristandeloche/kube-enable-coredns-on-node"` |  |
-| daemonset.image.tag | string | `"0.1.0"` |  |
-| daemonset.name | string | `"enable-coredns-on-node"` |  |
 | fullnameOverride | string | `""` | Release name override (full) |
 | image.pullPolicy | string | `"Always"` | Kubernetes pull policy image |
 | image.repository | string | `"shokohsc/volume-nfs"` | Container project image |
