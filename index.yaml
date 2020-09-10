@@ -3,6 +3,20 @@ entries:
   commander:
   - apiVersion: v2
     appVersion: 14.9.3-alpine
+    created: "2020-09-10T23:49:08.263929753Z"
+    description: A Helm chart for Kubernetes
+    digest: 97cc47270c17aa16ffebfc5c3a8fb56422e747315b9e2003a048851da603a524
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: commander
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/commander-0.1.1/commander-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 14.9.3-alpine
     created: "2020-08-30T19:23:50.5943668Z"
     description: A Helm chart for Kubernetes
     digest: 8d87cf74e2ab8021a6f7f8c2aba37abc63c5a0c05c0302d9538246641ed14309
