@@ -51,10 +51,18 @@ volumes: []
   #   server: nfs-wd1to.nfs.svc.cluster.local
   #   mountPath: /root/media/WD1To
   #   path: /
+  #   options:
+  #     - port=2049
+  #     - hard
+  #     - vers=4
   # - name: wd2to
   #   server: nfs-wd2to.nfs.svc.cluster.local
   #   mountPath: /root/media/WD2To
   #   path: /
+  #   options:
+  #     - port=2050
+  #     - soft
+  #     - vers=4.2
 
 
 service:

@@ -60,6 +60,10 @@ spec:
           nfs:
             server: {{ .server }}
             path: {{ .path }}
+            options: |-
+            {{- range .options }}
+              - {{ . }}
+            {{- end }}
         {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
