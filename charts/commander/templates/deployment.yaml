@@ -60,10 +60,12 @@ spec:
           nfs:
             server: {{ .server }}
             path: {{ .path }}
-            mountOptions: |-
+          {{- if .mountOptions }}
+          mountOptions:
             {{- range .mountOptions }}
-              - {{ . }}
+            - {{ . }}
             {{- end }}
+          {{- end }}
         {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
