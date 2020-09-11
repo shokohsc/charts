@@ -60,8 +60,8 @@ spec:
           nfs:
             server: {{ .server }}
             path: {{ .path }}
-            options: |-
-            {{- range .options }}
+            mountOptions: |-
+            {{- range .mountOptions }}
               - {{ . }}
             {{- end }}
         {{- end }}
