@@ -60,6 +60,20 @@ entries:
   nfs:
   - apiVersion: v2
     appVersion: v0.0.2
+    created: "2020-09-20T16:29:25.533370598Z"
+    description: A Helm chart for Kubernetes
+    digest: c0bb13df61e06ca47213206fa00796eeacc79527f65f59af257017e1ff95fca8
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: nfs
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/nfs-0.2.0/nfs-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: v0.0.2
     created: "2020-09-03T23:17:31.801252674Z"
     description: A Helm chart for Kubernetes
     digest: 5f922c1b0a03583f4e047b6e597befdb1f8805a6f0007ad4e9bac6f27a0c45eb
