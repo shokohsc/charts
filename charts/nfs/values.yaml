@@ -11,7 +11,8 @@ image:
   # image.pullPolicy -- Kubernetes pull policy image
   pullPolicy: Always
   # Overrides the image tag whose default is the chart version.
-  # tag: v0.0.2
+  # image.tag -- Container project image tag
+  # tag: ""
 
 # imagePullSecrets -- Registry pull secrets
 imagePullSecrets: []
