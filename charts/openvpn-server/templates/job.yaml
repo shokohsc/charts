@@ -1,0 +1,123 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ include "openvpn-server.fullname" . }}-ovpn-genconfig"
+  labels:
+    app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
+    helm.sh/chart: {{ include "openvpn-server.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      name: {{ include "openvpn-server.fullname" . }}
+      labels:
+        app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: ovpn-genconfig
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        env:
+          - name: SERVER_PUBLIC_URL
+            value: "{{ .Values.service.protocol | lower }}://{{ .Values.externalHostname }}:{{ .Values.externalPort | default .Values.service.port }}"
+          - name: CIPHER
+            value: "{{ .Values.cipher }}"
+          - name: DIGEST_ALGORYTHM
+            value: "{{ .Values.digestAlgorythm }}"
+          - name: DNS_SERVER
+            value: "{{ .Values.dnsServer }}"
+        command:
+          - /usr/local/bin/ovpn_genconfig
+        args:
+          - "-u"
+          - "$(SERVER_PUBLIC_URL)"
+          - "-C"
+          - "$(CIPHER)"
+          - "-a"
+          - "$(DIGEST_ALGORYTHM)"
+          - "-b"
+          - "-n"
+          - "$(DNS_SERVER)"
+          {{- range .Values.extraOptions }}
+          - -e
+          - {{ . | squote }}
+          {{- end }}
+        volumeMounts:
+          - name: data
+            mountPath: {{ .Values.persistence.mountPath }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.name" . }}{{- end }}
+
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ include "openvpn-server.fullname" . }}-ovpn-initpki"
+  labels:
+    app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
+    helm.sh/chart: {{ include "openvpn-server.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      name: {{ include "openvpn-server.fullname" . }}
+      labels:
+        app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: ovpn-initpki
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        command:
+          - /usr/local/bin/ovpn_initpki
+        {{- if not .Values.easyrsa.secret.enabled }}
+        args:
+          - nopass
+        {{- end }}
+        env:
+          - name: EASYRSA_BATCH
+            value: "yes"
+          - name: EASYRSA_REQ_CN
+            value: {{ .Values.externalHostname }}
+          {{- if .Values.easyrsa.secret.enabled }}
+          - name: EASYRSA_PASSIN
+            valueFrom:
+              secretKeyRef:
+                {{- if .Values.easyrsa.secret.existingSecret }}
+                name: {{ .Values.easyrsa.secret.existingSecret }}
+                {{- else }}
+                name: {{ template "openvpn-server.secretName" . }}
+                {{- end }}
+                key: openvpn-server-passphrase
+          - name: EASYRSA_PASSOUT
+            valueFrom:
+              secretKeyRef:
+                {{- if .Values.easyrsa.secret.existingSecret }}
+                name: {{ .Values.easyrsa.secret.existingSecret }}
+                {{- else }}
+                name: {{ template "openvpn-server.secretName" . }}
+                {{- end }}
+                key: openvpn-server-passphrase
+          {{- end }}
+        volumeMounts:
+          - name: data
+            mountPath: {{ .Values.persistence.mountPath }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.name" . }}{{- end }}
