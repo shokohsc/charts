@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "openvpn-server.fullname" . }}-{{ .Values.service.protocol | lower }}
+  labels:
+    app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
+    helm.sh/chart: {{ include "openvpn-server.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          name: "{{ .Chart.Name }}-{{ .Values.service.protocol | lower }}"
+          command:
+            - /usr/local/bin/ovpn_run
+          args:
+            - --proto
+            - {{ .Values.service.protocol | lower }}
+          ports:
+            - containerPort: 1194
+              name: "openvpn-{{ .Values.service.protocol | lower }}"
+              protocol: {{ .Values.service.protocol }}
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.name" . }}{{- end }}
+---
+{{- if .Values.service.fallback }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "openvpn-server.fullname" . }}-{{ include "openvpn-server.fallbackProtocol" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
+    helm.sh/chart: {{ include "openvpn-server.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          name: "{{ .Chart.Name }}-{{ include "openvpn-server.fallbackProtocol" . }}"
+          command:
+            - /usr/local/bin/ovpn_run
+          args:
+            - --proto
+            - {{ include "openvpn-server.fallbackProtocol" . }}
+          ports:
+            - containerPort: 1194
+              name: "openvpn-{{ include "openvpn-server.fallbackProtocol" . }}"
+              protocol: {{ include "openvpn-server.fallbackProtocol" . | upper }}
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.name" . }}{{- end }}
+{{- end }}
