@@ -1,0 +1,263 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pihole.fullname" . }}
+  labels:
+    {{- include "pihole.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "pihole.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "pihole.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "pihole.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      dnsPolicy: "None"
+      dnsConfig:
+        nameservers:
+          - 127.0.0.1
+          - 1.1.1.1
+      {{- if .Values.doh.enabled }}
+      hostAliases:
+        - ip: "8.8.4.4"
+          hostnames:
+          - "dns.google"
+        - ip: "9.9.9.9"
+          hostnames:
+          - "dns.quad9.net"
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: TZ
+              value: {{ .Values.timezone }}
+            {{- if .Values.doh.enabled }}
+            - name: DNS1
+              value: 127.0.0.1#5053
+            {{- else }}
+            - name: DNS1
+              value: 1.1.1.1
+            {{- end }}
+            - name: VIRTUAL_HOST
+              value: {{ .Values.virtualHost }}
+            - name: WEBPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: {{ .Values.admin.passwordKey | default "password" }}
+                  name: {{ .Values.admin.existingSecret | default (include "pihole.password-secret" .) }}
+            {{- range $key, $value := .Values.extraEnvVars }}
+            - name: {{ $key | quote }}
+              value: {{ $value | quote }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            - containerPort: 53
+              name: dns-tcp
+              protocol: TCP
+            - containerPort: 53
+              name: dns-udp
+              protocol: UDP
+          livenessProbe:
+            httpGet:
+              path: /admin.index.php
+              port: http
+            initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
+            failureThreshold: {{ .Values.probes.liveness.failureThreshold }}
+            timeoutSeconds: {{ .Values.probes.liveness.timeoutSeconds }}
+          readinessProbe:
+            httpGet:
+              path: /admin.index.php
+              port: http
+            initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds }}
+            failureThreshold: {{ .Values.probes.readiness.failureThreshold }}
+            timeoutSeconds: {{ .Values.probes.readiness.timeoutSeconds }}
+          volumeMounts:
+            - mountPath: /etc/pihole
+              name: config
+              {{- if .Values.persistentVolumeClaim.subPath }}
+              subPath: {{ .Values.persistentVolumeClaim.subPath }}
+              {{- end }}
+            - mountPath: /etc/dnsmasq.d/02-custom.conf
+              name: custom-dnsmasq
+              subPath: 02-custom.conf
+            - mountPath: /etc/addn-hosts
+              name: custom-dnsmasq
+              subPath: addn-hosts
+            {{- if .Values.adlists }}
+            - mountPath: /etc/pihole/adlists.list
+              name: adlists
+              subPath: adlists.list
+            {{- end }}
+            {{- if .Values.blacklist }}
+            - mountPath: /etc/pihole/blacklist.txt
+              name: blacklist
+              subPath: blacklist.txt
+            {{- end }}
+            {{- if .Values.regex }}
+            - mountPath: /etc/pihole/regex.list
+              name: regex
+              subPath: regex.list
+            {{- end }}
+            {{- if .Values.whitelist }}
+            - mountPath: /etc/pihole/whitelist.txt
+              name: whitelist
+              subPath: whitelist.txt
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        {{- if .Values.dhcp.enabled }}
+        - name: {{ .Chart.Name }}-dhcp
+          securityContext:
+            capabilities:
+              add:
+                - "NET_ADMIN"
+          image: "{{ .Values.dhcp.image.repository }}:{{ .Values.dhcp.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - -d
+            - -s
+            - 127.0.0.1
+          ports:
+            - name: dhcp-tcp
+              containerPort: 67
+              protocol: TCP
+            - name: dhcp-udp
+              containerPort: 67
+              protocol: UDP
+          livenessProbe:
+            exec:
+              command:
+                - nc
+                - -z
+                - -v
+                - -u
+                - 127.0.0.1
+                - '67'
+          readinessProbe:
+            exec:
+              command:
+                - nc
+                - -z
+                - -v
+                - -u
+                - 127.0.0.1
+                - '67'
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        {{- end }}
+        {{- if .Values.doh.enabled }}
+        - name: {{ .Chart.Name }}-doh
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.doh.image.repository }}:{{ .Values.doh.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          env:
+            - name: TZ
+              value: {{ .Values.timezone }}
+            - name: TUNNEL_DNS_UPSTREAM
+              value: {{ .Values.doh.upstream }}
+            - name: TUNNEL_METRICS
+              value: "0.0.0.0:49312"
+            - name: TUNNEL_DNS_ADDRESS
+              value: "0.0.0.0"
+            - name: TUNNEL_DNS_PORT
+              value: '5053'
+          ports:
+            - name: doh
+              containerPort: 5053
+              protocol: UDP
+            - name: doh-metrics
+              containerPort: 49312
+              protocol: TCP
+          livenessProbe:
+            exec:
+              command:
+                - nc
+                - -z
+                - -v
+                - -u
+                - 127.0.0.1
+                - '5053'
+          readinessProbe:
+            exec:
+              command:
+                - nc
+                - -z
+                - -v
+                - -u
+                - 127.0.0.1
+                - '5053'
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+      - name: config
+        {{- if .Values.persistentVolumeClaim.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ if .Values.persistentVolumeClaim.existingClaim }}{{ .Values.persistentVolumeClaim.existingClaim }}{{- else }}{{ template "pihole.fullname" . }}{{- end }}
+        {{- else }}
+        emptyDir: {}
+        {{- end }}
+      - configMap:
+          defaultMode: 420
+          name: {{ template "pihole.fullname" . }}-custom-dnsmasq
+        name: custom-dnsmasq
+      {{- if .Values.adlists }}
+      - configMap:
+          defaultMode: 420
+          name: {{ template "pihole.fullname" . }}-adlists
+        name: adlists
+      {{- end }}
+      {{- if .Values.whitelist }}
+      - configMap:
+          defaultMode: 420
+          name: {{ template "pihole.fullname" . }}-whitelist
+        name: whitelist
+      {{- end }}
+      {{- if .Values.blacklist }}
+      - configMap:
+          defaultMode: 420
+          name: {{ template "pihole.fullname" . }}-blacklist
+        name: blacklist
+      {{- end }}
+      {{- if .Values.regex }}
+      - configMap:
+          defaultMode: 420
+          name: {{ template "pihole.fullname" . }}-regex
+        name: regex
+      {{- end }}
