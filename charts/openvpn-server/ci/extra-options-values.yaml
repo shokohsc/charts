@@ -5,7 +5,6 @@ service:
   type: ClusterIP
   fallback: true
 
-batch:
-  extraOptions:
-    - 'management 0.0.0.0 5555'
-    - 'push "redirect-gateway def1 bypass-dhcp"'
+extraOptions:
+  - 'management 0.0.0.0 5555'
+  - 'push "redirect-gateway def1 bypass-dhcp"'

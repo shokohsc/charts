@@ -23,7 +23,7 @@ Roll your own OpenVPN server
 | easyrsa.caExpire | int | `42` | set the CA expiration time in days |
 | easyrsa.certExpire | int | `42` | set the issued cert expiration time in days |
 | easyrsa.crlDays | int | `42` | set the CRL 'next publish' time in days |
-| easyrsa.secret.enabled | bool | `true` | Enabling passphrase on CA (recommended, defaults to false) |
+| easyrsa.secret.enabled | bool | `false` | Enabling passphrase on CA (recommended, defaults to false) |
 | easyrsa.secret.existingSecret | string | `""` | Existing Secret with existing key: openvpn-server-passphrase |
 | easyrsa.secret.passphrase | string | `""` | Secret passphrase i.e pass:1234 |
 | externalHostname | string | `"domain.tld"` | Hostname OR Ip of cluster openvpn entrypoint, default to 'domain.tld' so you must define it |

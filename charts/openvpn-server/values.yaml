@@ -70,7 +70,7 @@ easyrsa:
   crlDays: 42
   secret:
     # easyrsa.secret.enabled -- Enabling passphrase on CA (recommended, defaults to false)
-    enabled: true
+    enabled: false
     # easyrsa.secret.existingSecret -- Existing Secret with existing key: openvpn-server-passphrase
     existingSecret: ""
     # easyrsa.secret.passphrase -- Secret passphrase i.e pass:1234
