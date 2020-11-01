@@ -100,4 +100,19 @@ entries:
     urls:
     - https://github.com/shokohsc/charts/releases/download/nfs-0.0.1/nfs-0.0.1.tgz
     version: 0.0.1
+  openvpn-server:
+  - apiVersion: v2
+    appVersion: "2.4"
+    created: "2020-11-01T19:50:07.470316106Z"
+    description: Roll your own OpenVPN server
+    digest: d3483c7ff20af956b54cb96ee1b5d9f9881a5693ed6888bfc3e067e3a4263aa3
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: openvpn-server
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/openvpn-server-0.1.0/openvpn-server-0.1.0.tgz
+    version: 0.1.0
 generated: "2020-08-30T19:23:50.500148197Z"
