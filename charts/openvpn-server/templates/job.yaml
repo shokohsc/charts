@@ -114,6 +114,8 @@ spec:
                 {{- end }}
                 key: openvpn-server-passphrase
           {{- end }}
+          - name: EASYRSA_CA_EXPIRE
+            value: {{ .Values.easyrsa.caExpire | quote }}
         volumeMounts:
           - name: data
             mountPath: {{ .Values.persistence.mountPath }}
