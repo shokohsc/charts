@@ -63,11 +63,11 @@ extraOptions: []
 
 easyrsa:
   # easyrsa.caExpire -- set the CA expiration time in days
-  caExpire: 42
+  caExpire: 30
   # easyrsa.certExpire -- set the issued cert expiration time in days
-  certExpire: 42
+  certExpire: 30
   # easyrsa.crlDays -- set the CRL 'next publish' time in days
-  crlDays: 42
+  crlDays: 30
   secret:
     # easyrsa.secret.enabled -- Enabling passphrase on CA (recommended, defaults to false)
     enabled: false

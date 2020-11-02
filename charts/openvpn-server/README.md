@@ -1,6 +1,6 @@
 # openvpn-server
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.4](https://img.shields.io/badge/AppVersion-2.4-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.4](https://img.shields.io/badge/AppVersion-2.4-informational?style=flat-square)
 
 Roll your own OpenVPN server
 
@@ -20,9 +20,9 @@ Roll your own OpenVPN server
 | cipher | string | `"AES-256-CBC"` | Cipher used |
 | digestAlgorythm | string | `"SHA384"` | Authenticate  packets with HMAC using the given message digest algorithm (auth). |
 | dnsServer | string | `"8.8.8.8"` | DNS Server IP |
-| easyrsa.caExpire | int | `42` | set the CA expiration time in days |
-| easyrsa.certExpire | int | `42` | set the issued cert expiration time in days |
-| easyrsa.crlDays | int | `42` | set the CRL 'next publish' time in days |
+| easyrsa.caExpire | int | `30` | set the CA expiration time in days |
+| easyrsa.certExpire | int | `30` | set the issued cert expiration time in days |
+| easyrsa.crlDays | int | `30` | set the CRL 'next publish' time in days |
 | easyrsa.secret.enabled | bool | `false` | Enabling passphrase on CA (recommended, defaults to false) |
 | easyrsa.secret.existingSecret | string | `""` | Existing Secret with existing key: openvpn-server-passphrase |
 | easyrsa.secret.passphrase | string | `""` | Secret passphrase i.e pass:1234 |
