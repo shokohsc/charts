@@ -129,4 +129,19 @@ entries:
     urls:
     - https://github.com/shokohsc/charts/releases/download/openvpn-server-0.1.0/openvpn-server-0.1.0.tgz
     version: 0.1.0
+  pihole:
+  - apiVersion: v2
+    appVersion: v5.1.2
+    created: "2020-12-04T20:07:39.22545428Z"
+    description: A Helm chart for Kubernetes
+    digest: bfa8c5de60d7136f1830fd3a70f92264fc584c56fdd44c16e2e11dd07a11f954
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: pihole
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/pihole-0.1.0/pihole-0.1.0.tgz
+    version: 0.1.0
 generated: "2020-08-30T19:23:50.500148197Z"
