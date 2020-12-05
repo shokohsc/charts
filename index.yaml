@@ -57,6 +57,21 @@ entries:
     urls:
     - https://github.com/shokohsc/charts/releases/download/commander-0.1.0/commander-0.1.0.tgz
     version: 0.1.0
+  duckdns:
+  - apiVersion: v2
+    appVersion: 7.73.0
+    created: "2020-12-05T20:41:30.491674357Z"
+    description: A Helm chart for Kubernetes
+    digest: 906c36feae0c916319d714ebdebe17afebae45ce5f6825d56f9d27fd9cb9a8f5
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: duckdns
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/duckdns-0.1.0/duckdns-0.1.0.tgz
+    version: 0.1.0
   nfs:
   - apiVersion: v2
     appVersion: v0.0.2
