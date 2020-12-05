@@ -1,0 +1,32 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "duckdns.fullname" . }}
+spec:
+  schedule: {{ .Values.cronjob.schedule | quote }}
+  successfulJobsHistoryLimit: {{ .Values.cronjob.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.cronjob.failedJobsHistoryLimit }}
+  startingDeadlineSeconds: {{ .Values.cronjob.startingDeadlineSeconds }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: {{ include "duckdns.serviceAccountName" . }}
+          containers:
+          - name: {{ include "duckdns.fullname" . }}
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+            env:
+              - name: SUBDOMAINS
+                value: {{ .Values.subDomains }}
+              - name: TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    key: {{ .Values.secret.tokenKey | default "token" }}
+                    name: {{ .Values.secret.existingSecret | default (include "duckdns.token-secret" .) }}
+              {{- range $key, $value := .Values.extraEnvVars }}
+              - name: {{ $key | quote }}
+                value: {{ $value | quote }}
+              {{- end }}
+            args:
+              - "https://www.duckdns.org/update?domains=$SUBDOMAINS&token=$TOKEN&ip="
+          restartPolicy: {{ .Values.cronjob.restartPolicy }}
