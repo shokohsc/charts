@@ -62,7 +62,7 @@ cipher: AES-256-CBC
 # digestAlgorythm -- Authenticate  packets with HMAC using the given message digest algorithm (auth).
 digestAlgorythm: SHA384
 # dnsServer -- DNS Server IP
-dnsServer: 8.8.8.8
+dnsServer: 1.1.1.1
 # extraOptions -- Additional options for openvpn configuration
 extraOptions: []
 
@@ -80,6 +80,8 @@ easyrsa:
     existingSecret: ""
     # easyrsa.secret.passphrase -- Secret passphrase i.e pass:1234
     passphrase: ""
+    # easyrsa.secret.annotations -- Secret annotations
+    annotations: {}
 
 jobs:
   ## Job annotations
