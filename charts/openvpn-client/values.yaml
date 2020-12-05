@@ -1,0 +1,194 @@
+# Default values for openvpn-client.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# replicaCount -- pods replica count
+replicaCount: 1
+
+image:
+  # image.repository -- container image repository
+  repository: shokohsc/openvpn-client
+  # image.pullPolicy -- container image pull policy
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  # image.tag -- container image tag or Chart appVersion if undefined
+  tag: ""
+
+# imagePullSecrets -- registry secret
+imagePullSecrets: []
+# nameOverride -- release name override option
+nameOverride: ""
+# fullnameOverride -- release full release name override option
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  # serviceAccount.create -- Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  # serviceAccount.annotations -- Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  # serviceAccount.name -- The name of the service account to use
+  name: ""
+
+# podAnnotations -- Pod annotations
+podAnnotations: {}
+
+# podSecurityContext -- Pod security group context
+podSecurityContext: {}
+  # fsGroup: 2000
+
+# securityContext -- Deployment security group context
+securityContext:
+  capabilities:
+    add:
+      - NET_ADMIN
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  # service.type -- Service type
+  type: ClusterIP
+  # Annotations to add to the service
+  # service.annotations -- Service annotations
+  annotations: {}
+
+ingress:
+  # ingress.enabled -- Ingress toggle
+  enabled: false
+  # ingress.annotations -- Ingress annotations
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  # ingress.hosts -- Ingress hosts entries
+  hosts:
+    - host: chart-example.local
+      paths: []
+  # ingress.tls -- Ingress tls entries
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+# resources -- pod resource requests & limits
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  # autoscaling.enabled -- HorizontalPodAutoscaler toggle
+  enabled: false
+  # autoscaling.minReplicas -- HorizontalPodAutoscaler minimum replicas
+  minReplicas: 1
+  # autoscaling.maxReplicas -- HorizontalPodAutoscaler maximum replicas
+  maxReplicas: 100
+  # autoscaling.targetCPUUtilizationPercentage -- HorizontalPodAutoscaler targetCPUUtilizationPercentage
+  targetCPUUtilizationPercentage: 80
+  # autoscaling.targetMemoryUtilizationPercentage -- HorizontalPodAutoscaler targetMemoryUtilizationPercentage
+  # targetMemoryUtilizationPercentage: 80
+
+# nodeSelector -- node labels for pod assignment
+nodeSelector: {}
+
+# tolerations -- node taints to tolerate (requires Kubernetes >=1.6)
+tolerations: []
+
+# affinity -- node/pod affinities (requires Kubernetes >=1.6)
+affinity: {}
+
+persistence: {}
+
+# https://github.com/dperson/openvpn-client
+# envVars -- Pod environment variables
+envVars:
+  FIREWALL: ''
+  ROUTE: 192.168.1.0/24
+  TZ: UTC
+
+# nameservers -- Upstream nameservers for vpn to use
+nameservers:
+  - 1.1.1.1
+
+sidekick:
+  image:
+    # sidekick.image.repository -- Sidekick image repository
+    repository: shokohsc/sidekick
+    # sidekick.image.tag -- Sidekick image tag
+    tag: main
+    # sidekick.image.pullPolicy -- container image pull policy
+    pullPolicy: Always
+  service:
+    # sidekick.service.type -- Sidekick service type
+    type: ClusterIP
+    # sidekick.service.port -- Sidekick service port
+    port: 3000
+    # sidekick.service.annotations -- Sidekick service annotations
+    annotations: {}
+  # sidekick.annotations -- Sidekick pod annotations
+  annotations: {}
+  # sidekick.envVars -- Sidekick pod environment variables
+  envVars: {}
+    # MATTERMOST_WEBHOOK_URL: ""
+    # RCON_HOST: minecraft
+    # RCON_PORT: ""
+    # RCON_PASSWORD: ""
+    # AMQP_HOST: rabbitmq
+    # ALLOWED_COUNTRIES_SERVERS: "*" # '*', 'russia', 'usa', 'japan', 'korea', 'thailand' are valid choices for now
+    # OPENVPN_PROFILE_PROTOCOL: "*" # '*', 'udp', 'tcp' are valid choices
+
+# sidecars -- Pod sidecars
+sidecars:
+  - name: transmission
+    image:
+      repository: linuxserver/transmission
+      tag: latest
+      pullPolicy: IfNotPresent
+    service:
+      type: ClusterIP
+      port: 9091
+      annotations: {}
+    annotations: {}
+    persistence:
+      - name: config
+        mountPath: /config
+        accessModes:
+          - ReadWriteOnce
+        size: 200Mi
+        annotations: {}
+      - name: download
+        mountPath: /downloads
+        accessModes:
+          - ReadWriteOnce
+        size: 1Gi
+        annotations: {}
+      # - name: download-incomplete
+      #   mountPath: /downloads/incomplete
+      #   accessModes:
+      #     - ReadWriteOnce
+      #   size: 1Gi
+      #   annotations: {}
+    # nfs:
+    #   - name: download-complete
+    #     server: shared-0.shared.nfs.svc.cluster.local
+    #     path: /
+    #     mountPath: /downloads/complete
+    configMap:
+      name: transmission-settings
+      mountPath: /cfg
+      source: /cfg/settings.json
+      target: /config/settings.json
+    envVars:
+      TZ: UTC
+    resources: {}
+    startupProbe: "ps -fe | grep '/usr/bin/trans[m]ission-daemon -g /config -c /watch -f'"

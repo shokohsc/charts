@@ -1,0 +1,5 @@
+---
+envVars:
+  FIREWALL: ''
+  ROUTE: 172.16.1.0/24
+  TZ: Europe/Paris

@@ -1,0 +1,247 @@
+{{- $ctx := . }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "openvpn-client.fullname" . }}-sidekick
+  labels:
+    {{- include "openvpn-client.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "openvpn-client.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.sidekick.annotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "openvpn-client.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "openvpn-client.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.sidekick.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-sidekick
+          securityContext:
+            {{- toYaml .Values.sidekick.securityContext | nindent 12 }}
+          image: "{{ .Values.sidekick.image.repository }}:{{ .Values.sidekick.image.tag }}"
+          imagePullPolicy: {{ .Values.sidekick.image.pullPolicy }}
+          env:
+            {{- range $key, $value := .Values.sidekick.envVars }}
+            - name: {{ $key | quote }}
+              value: {{ $value | quote }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /api
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /api
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "openvpn-client.fullname" . }}
+  labels:
+    {{- include "openvpn-client.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook-weight": "10"
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "openvpn-client.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "openvpn-client.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "openvpn-client.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      dnsPolicy: "ClusterFirst"
+      dnsConfig:
+        nameservers:
+          {{- range $nameserver := .Values.nameservers }}
+          - {{ $nameserver }}
+          {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: SIDEKICK_URL
+              value: "http://{{ include "openvpn-client.fullname" . }}-sidekick:{{ .Values.sidekick.service.port }}/api/ovpn"
+            {{- range $key, $value := .Values.envVars }}
+            - name: {{ $key | quote }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- range $index, $sidecar := .Values.sidecars }}
+            - name: {{ printf "%s_%d" "VPN_PORT" (add (index $index) 1) }}
+              value: {{ $sidecar.service.port | quote }}
+            {{- end }}
+          ports:
+            {{- range $sidecar := .Values.sidecars }}
+            - name: {{ $sidecar.name }}
+              containerPort: {{ $sidecar.service.port }}
+              protocol: TCP
+            {{- end }}
+          startupProbe:
+          # The kubelet uses startup probes to know when a container application has started.
+          # If such a probe is configured, it disables liveness and readiness checks until it succeeds,
+          # making sure those probes don't interfere with the application startup.
+          # This can be used to adopt liveness checks on slow starting containers,
+          # avoiding them getting killed by the kubelet before they are up and running.
+            exec:
+              command:
+                - sh
+                - -c
+                - ps -fe | grep "open[v]pn --cd /vpn --config /vpn/vpn_conf.ovpn"
+            failureThreshold: 1
+          livenessProbe:
+          # The kubelet uses liveness probes to know when to restart a container.
+          # For example, liveness probes could catch a deadlock, where an application is running, but unable to make progress.
+          # Restarting a container in such a state can help to make the application more available despite bugs.
+            exec:
+              command:
+                - sh
+                - -c
+                - ps -fe | grep "open[v]pn --cd /vpn --config /vpn/vpn_conf.ovpn"
+            failureThreshold: 1
+          readinessProbe:
+          # The kubelet uses readiness probes to know when a container is ready to start accepting traffic.
+          # A Pod is considered ready when all of its containers are ready.
+          # One use of this signal is to control which Pods are used as backends for Services.
+          # When a Pod is not ready, it is removed from Service load balancers.
+            exec:
+              command:
+                - sh
+                - -c
+                - ps -fe | grep "open[v]pn --cd /vpn --config /vpn/vpn_conf.ovpn"
+            failureThreshold: 1
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        {{- range $sidecar := .Values.sidecars }}
+        - name: {{ $sidecar.name | quote }}
+          image: "{{ $sidecar.image.repository }}:{{ $sidecar.image.tag }}"
+          imagePullPolicy: {{ $sidecar.image.pullPolicy }}
+          env:
+            {{- range $key, $value := $sidecar.envVars }}
+            - name: {{ $key | quote }}
+              value: {{ $value | quote }}
+            {{- end }}
+          {{- if $sidecar.startupProbe }}
+          startupProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - {{ $sidecar.startupProbe }}
+            initialDelaySeconds: 10
+          {{- end }}
+          livenessProbe:
+            exec:
+              command:
+                - curl
+                - -sIfkLX
+                - GET
+                - "http://localhost:{{ $sidecar.service.port }}"
+          readinessProbe:
+            exec:
+              command:
+                - curl
+                - -sIfkLX
+                - GET
+                - "http://localhost:{{ $sidecar.service.port }}"
+          volumeMounts:
+            {{- range $persistence := $sidecar.persistence }}
+            - name: {{ printf "%s-%s"  $sidecar.name $persistence.name }}
+              mountPath: {{ $persistence.mountPath }}
+            {{- end }}
+            {{- range $nfs := $sidecar.nfs }}
+            - name: {{ printf "%s-%s"  $sidecar.name $nfs.name }}
+              mountPath: {{ $nfs.mountPath }}
+              readOnly: false
+            {{- end }}
+          resources:
+            {{- toYaml $sidecar.resources | nindent 12 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        {{- range $sidecar := .Values.sidecars }}
+        {{- if $sidecar.configMap }}
+        - name: {{ $sidecar.configMap.name }}
+          configMap:
+            name: {{ $sidecar.configMap.name }}
+            defaultMode: 0644
+        {{- end }}
+        {{- range $persistence := $sidecar.persistence }}
+        - name: {{ printf "%s-%s"  $sidecar.name $persistence.name }}
+          persistentVolumeClaim:
+            claimName: {{ printf "%s-%s"  $sidecar.name $persistence.name }}
+        {{- end }}
+        {{- range $nfs := $sidecar.nfs }}
+        - name: {{ printf "%s-%s"  $sidecar.name $nfs.name }}
+          nfs:
+            server: {{ $nfs.server }}
+            path: {{ $nfs.path }}
+          {{- if $nfs.mountOptions }}
+          mountOptions:
+            {{- range $option := $nfs.mountOptions }}
+            - {{ $option }}
+            {{- end }}
+          {{- end }}
+        {{- end }}
+        {{- end }}

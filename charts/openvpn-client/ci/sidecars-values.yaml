@@ -1,0 +1,70 @@
+---
+sidecars:
+  - name: peerflix
+    image:
+      repository: shokohsc/peerflix-server
+      tag: latest
+      pullPolicy: IfNotPresent
+    service:
+      type: ClusterIP
+      port: 9000
+      annotations: {}
+    annotations: {}
+    persistence:
+      - name: data
+        mountPath: /tmp/torrent-stream
+        accessModes:
+          - ReadWriteOnce
+        size: 1Gi
+        annotations: {}
+    envVars: {}
+    resources: {}
+    startupProbe: "ps -fe | grep 'no[d]e ./server/bin.js'"
+  - name: cloudtorrent
+    image:
+      repository: shokohsc/cloud-torrent
+      tag: latest
+      pullPolicy: IfNotPresent
+    service:
+      type: ClusterIP
+      port: 3000
+      annotations: {}
+    annotations: {}
+    persistence:
+      - name: data
+        mountPath: /downloads
+        accessModes:
+          - ReadWriteOnce
+        size: 1Gi
+        annotations: {}
+    envVars: {}
+    resources: {}
+    startupProbe: "ps -fe | grep 'clo[u]d-torrent'"
+  - name: deluge
+    image:
+      repository: linuxserver/deluge
+      tag: latest
+      pullPolicy: IfNotPresent
+    service:
+      type: ClusterIP
+      port: 8112
+      annotations: {}
+    annotations: {}
+    persistence:
+      - name: config
+        mountPath: /config
+        accessModes:
+          - ReadWriteOnce
+        size: 200Mi
+        annotations: {}
+      - name: data
+        mountPath: /downloads
+        accessModes:
+          - ReadWriteOnce
+        size: 1Gi
+        annotations: {}
+    envVars:
+      TZ: UTC
+      DELUGE_LOGLEVEL: error
+    resources: {}
+    startupProbe: "ps -fe | grep '/usr/bin/python3 /usr/bin/del[u]ged -c /config -d'"
