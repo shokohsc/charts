@@ -15,7 +15,7 @@ service:
   # service.protocol -- OpenVPN protocol
   protocol: TCP
   # service.port -- OpenVPN port
-  port: 32765
+  port: 1194
   # service.type -- Service type
   type: ClusterIP
   # service.fallback -- Enables protocol fallback
@@ -108,7 +108,7 @@ persistence:
   ## Persistent Volume size
   ##
   # persistence.size -- PersistentVolumeClaim size request
-  size: 8Gi
+  size: 200Mi
 
   ## Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>

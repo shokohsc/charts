@@ -1,6 +1,4 @@
 ---
 service:
   protocol: TCP
-  port: 1194
-  type: ClusterIP
   fallback: true
