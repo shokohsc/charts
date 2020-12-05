@@ -103,6 +103,20 @@ entries:
   openvpn-server:
   - apiVersion: v2
     appVersion: "2.4"
+    created: "2020-12-05T19:40:13.708395481Z"
+    description: Roll your own OpenVPN server
+    digest: 09010815d9b79eac2d5074ee3de04161a63002368e4bf1e46c2b11388d579ad9
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: openvpn-server
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/openvpn-server-0.1.2/openvpn-server-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: "2.4"
     created: "2020-11-02T23:20:40.560317536Z"
     description: Roll your own OpenVPN server
     digest: fc74075bd287e673797874ac27a48a0361311393f40f2a5c18a6e9a81e983649
