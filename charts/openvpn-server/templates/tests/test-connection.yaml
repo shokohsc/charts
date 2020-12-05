@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "openvpn-server.labels" . | nindent 4 }}
   annotations:
-    "helm.sh/hook": "test,post-install"
+    "helm.sh/hook": "test-success,post-install"
     "helm.sh/hook-weight": "20"
 spec:
   containers:

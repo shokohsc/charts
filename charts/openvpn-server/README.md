@@ -1,6 +1,6 @@
 # openvpn-server
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.4](https://img.shields.io/badge/AppVersion-2.4-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.4](https://img.shields.io/badge/AppVersion-2.4-informational?style=flat-square)
 
 Roll your own OpenVPN server
 
@@ -17,6 +17,7 @@ Roll your own OpenVPN server
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | affinity | object | `{}` | node/pod affinities (requires Kubernetes >=1.6) |
+| annotations | object | `{}` | Deployment annotations |
 | cipher | string | `"AES-256-CBC"` | Cipher used |
 | digestAlgorythm | string | `"SHA384"` | Authenticate  packets with HMAC using the given message digest algorithm (auth). |
 | dnsServer | string | `"8.8.8.8"` | DNS Server IP |
@@ -33,6 +34,7 @@ Roll your own OpenVPN server
 | image.pullPolicy | string | `"IfNotPresent"` | container image pull policy |
 | image.repository | string | `"kylemanna/openvpn"` | container image repository |
 | image.tag | string | `""` | container image tag or Chart appVersion if undefined |
+| jobs.annotations | object | `{}` | Job annotations |
 | limitTraficToNamespace | bool | `true` | limit network traffic just to OpenVPN namespace |
 | limitedCidr | string | `"10.0.0.0/8"` | CIDR to be blocked out |
 | nameOverride | string | `""` | release name override option |
@@ -42,6 +44,7 @@ Roll your own OpenVPN server
 | persistence.mountPath | string | `"/etc/openvpn"` | PersistentVolumeClaim mounting path |
 | persistence.size | string | `"8Gi"` | PersistentVolumeClaim size request |
 | resources | object | `{}` | pod resource requests & limits |
+| service.annotations | object | `{}` | Service annotations |
 | service.fallback | bool | `false` | Enables protocol fallback |
 | service.port | int | `32765` | OpenVPN port |
 | service.protocol | string | `"TCP"` | OpenVPN protocol |
