@@ -1,6 +1,6 @@
 # openvpn-server
 
-![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.4](https://img.shields.io/badge/AppVersion-2.4-informational?style=flat-square)
+![Version: 0.1.4](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.4](https://img.shields.io/badge/AppVersion-2.4-informational?style=flat-square)
 
 Roll your own OpenVPN server
 
@@ -42,11 +42,11 @@ Roll your own OpenVPN server
 | persistence.accessModes | list | `["ReadWriteOnce"]` | PersistentVolumeClaim access modes |
 | persistence.annotations | object | `{}` | PersistentVolumeClaim annotations |
 | persistence.mountPath | string | `"/etc/openvpn"` | PersistentVolumeClaim mounting path |
-| persistence.size | string | `"8Gi"` | PersistentVolumeClaim size request |
+| persistence.size | string | `"200Mi"` | PersistentVolumeClaim size request |
 | resources | object | `{}` | pod resource requests & limits |
 | service.annotations | object | `{}` | Service annotations |
 | service.fallback | bool | `false` | Enables protocol fallback |
-| service.port | int | `32765` | OpenVPN port |
+| service.port | int | `1194` | OpenVPN port |
 | service.protocol | string | `"TCP"` | OpenVPN protocol |
 | service.type | string | `"ClusterIP"` | Service type |
 | tolerations | list | `[]` | node taints to tolerate (requires Kubernetes >=1.6) |

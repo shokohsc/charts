@@ -1,10 +1,4 @@
 ---
-service:
-  protocol: UDP
-  port: 1194
-  type: ClusterIP
-  fallback: true
-
 easyrsa:
   secret:
     enabled: true
