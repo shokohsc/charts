@@ -20,6 +20,8 @@ service:
   type: ClusterIP
   # service.fallback -- Enables protocol fallback
   fallback: false
+  # service.annotations -- Service annotations
+  annotations: {}
 
 # limitTraficToNamespace -- limit network traffic just to OpenVPN namespace
 limitTraficToNamespace: true
@@ -48,6 +50,9 @@ tolerations: []
 # affinity -- node/pod affinities (requires Kubernetes >=1.6)
 affinity: {}
 
+# annotations -- Deployment annotations
+annotations: {}
+
 # externalHostname -- Hostname OR Ip of cluster openvpn entrypoint, default to 'domain.tld' so you must define it
 externalHostname: "domain.tld"
 # externalPort -- Port cluster openvpn entrypoint, defaults to service.port (nodePort)
@@ -75,6 +80,12 @@ easyrsa:
     existingSecret: ""
     # easyrsa.secret.passphrase -- Secret passphrase i.e pass:1234
     passphrase: ""
+
+jobs:
+  ## Job annotations
+  ##
+  # jobs.annotations -- Job annotations
+  annotations: {}
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/

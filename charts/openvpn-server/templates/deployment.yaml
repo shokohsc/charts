@@ -7,6 +7,9 @@ metadata:
     helm.sh/chart: {{ include "openvpn-server.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- with .Values.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   strategy:
     type: RollingUpdate
@@ -69,6 +72,9 @@ metadata:
     helm.sh/chart: {{ include "openvpn-server.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- with .Values.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   strategy:
     type: RollingUpdate
