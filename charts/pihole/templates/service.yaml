@@ -4,6 +4,10 @@ metadata:
   name: {{ include "pihole.fullname" . }}
   labels:
     {{- include "pihole.labels" . | nindent 4 }}
+  {{- if .Values.service.annotations }}
+  annotations:
+    {{ toYaml .Values.service.annotations | indent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -19,7 +23,24 @@ spec:
       targetPort: dns-udp
       protocol: UDP
       name: dns-udp
-    {{- if .Values.dhcp.enabled }}
+  selector:
+    {{- include "pihole.selectorLabels" . | nindent 4 }}
+
+{{- if .Values.dhcp.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "pihole.fullname" . }}-dhcp
+  labels:
+    {{- include "pihole.labels" . | nindent 4 }}
+  {{- if .Values.dhcp.service.annotations }}
+  annotations:
+    {{ toYaml .Values.dhcp.service.annotations | indent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.dhcp.service.type }}
+  ports:
     - port: 67
       targetPort: dhcp-tcp
       protocol: TCP
@@ -28,8 +49,25 @@ spec:
       targetPort: dhcp-udp
       protocol: UDP
       name: dhcp-udp
-    {{- end }}
-    {{- if .Values.doh.enabled }}
+  selector:
+    {{- include "pihole.selectorLabels" . | nindent 4 }}
+{{- end }}
+
+{{- if .Values.doh.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "pihole.fullname" . }}-doh
+  labels:
+    {{- include "pihole.labels" . | nindent 4 }}
+  {{- if .Values.doh.service.annotations }}
+  annotations:
+    {{ toYaml .Values.doh.service.annotations | indent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.doh.service.type }}
+  ports:
     - port: 5053
       targetPort: doh
       protocol: UDP
@@ -38,6 +76,6 @@ spec:
       targetPort: doh-metrics
       protocol: TCP
       name: doh-metrics
-    {{- end }}
   selector:
     {{- include "pihole.selectorLabels" . | nindent 4 }}
+{{- end }}
