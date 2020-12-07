@@ -59,3 +59,5 @@ spec:
       args: ['-port=5053', 'google.com', '{{ include "pihole.fullname" . }}']
   restartPolicy: Never
 {{- end }}
+
+# TEST DHCP https://serverfault.com/questions/171744/command-line-program-to-test-dhcp-service

@@ -52,10 +52,14 @@ spec:
               value: {{ .Values.timezone }}
             {{- if .Values.doh.enabled }}
             - name: DNS1
-              value: 127.0.0.1#5053
+              value: "127.0.0.1#5053"
+            - name: DNS2
+              value: "no"
             {{- else }}
             - name: DNS1
-              value: 1.1.1.1
+              value: "127.0.0.1#53"
+            - name: DNS2
+              value: "1.1.1.1"
             {{- end }}
             - name: VIRTUAL_HOST
               value: {{ .Values.virtualHost }}
