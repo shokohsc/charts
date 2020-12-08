@@ -217,20 +217,6 @@ entries:
   pihole:
   - apiVersion: v2
     appVersion: v5.1.2
-    created: "2020-12-08T20:19:26.657366781Z"
-    description: A Helm chart for Kubernetes
-    digest: 65b3cb180882fdc4c96de26754156b50c79e786a7d03c20e5118b9150712c039
-    home: https://shokohsc.github.io/charts/
-    maintainers:
-    - email: shokohsc@gmail.com
-      name: shokohsc
-    name: pihole
-    type: application
-    urls:
-    - https://github.com/shokohsc/charts/releases/download/pihole-0.1.1/pihole-0.1.1.tgz
-    version: 0.1.1
-  - apiVersion: v2
-    appVersion: v5.1.2
     created: "2020-12-04T20:07:39.22545428Z"
     description: A Helm chart for Kubernetes
     digest: bfa8c5de60d7136f1830fd3a70f92264fc584c56fdd44c16e2e11dd07a11f954
