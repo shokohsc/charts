@@ -21,6 +21,10 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+      annotations:
+        {{- with .Values.jobs.annotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       restartPolicy: Never
       containers:
@@ -84,6 +88,10 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+      annotations:
+        {{- with .Values.jobs.annotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       restartPolicy: Never
       containers:

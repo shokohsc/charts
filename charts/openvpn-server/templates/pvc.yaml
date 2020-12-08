@@ -5,7 +5,7 @@ metadata:
   labels: {{- include "openvpn-server.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "-15"
+    "helm.sh/hook-weight": "-10"
     {{- with .Values.persistence.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}

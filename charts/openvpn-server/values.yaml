@@ -1,3 +1,6 @@
+# replicaCount -- pods replica count
+replicaCount: 1
+
 image:
   # image.repository -- container image repository
   repository: kylemanna/openvpn
