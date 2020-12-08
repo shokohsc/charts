@@ -1,6 +1,6 @@
 # openvpn-server
 
-![Version: 0.1.5](https://img.shields.io/badge/Version-0.1.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.4](https://img.shields.io/badge/AppVersion-2.4-informational?style=flat-square)
+![Version: 0.1.6](https://img.shields.io/badge/Version-0.1.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.4](https://img.shields.io/badge/AppVersion-2.4-informational?style=flat-square)
 
 Roll your own OpenVPN server
 
@@ -44,6 +44,7 @@ Roll your own OpenVPN server
 | persistence.annotations | object | `{}` | PersistentVolumeClaim annotations |
 | persistence.mountPath | string | `"/etc/openvpn"` | PersistentVolumeClaim mounting path |
 | persistence.size | string | `"200Mi"` | PersistentVolumeClaim size request |
+| replicaCount | int | `1` | pods replica count |
 | resources | object | `{}` | pod resource requests & limits |
 | service.annotations | object | `{}` | Service annotations |
 | service.fallback | bool | `false` | Enables protocol fallback |
