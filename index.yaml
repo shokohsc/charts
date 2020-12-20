@@ -115,6 +115,21 @@ entries:
     urls:
     - https://github.com/shokohsc/charts/releases/download/nfs-0.0.1/nfs-0.0.1.tgz
     version: 0.0.1
+  openvpn-client:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2020-12-20T19:11:02.108349833Z"
+    description: A Helm chart for Kubernetes
+    digest: 7ddf048eff6b8c2ac759874ef825c69d6372759300b2f3d2a7cf2a621aad0ada
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: openvpn-client
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/openvpn-client-0.1.0/openvpn-client-0.1.0.tgz
+    version: 0.1.0
   openvpn-server:
   - apiVersion: v2
     appVersion: "2.4"
