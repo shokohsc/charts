@@ -1,6 +1,6 @@
 # pihole
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.1.2](https://img.shields.io/badge/AppVersion-v5.1.2-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.1.2](https://img.shields.io/badge/AppVersion-v5.1.2-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -31,6 +31,8 @@ A Helm chart for Kubernetes
 | dhcp.image.tag | string | `"latest"` | DHCP image tag |
 | dhcp.service.annotations | object | `{}` | DHCP service annotations |
 | dhcp.service.type | string | `"ClusterIP"` | DHCP service type |
+| dns.service.annotations | object | `{}` | DNS service annotations |
+| dns.service.type | string | `"ClusterIP"` | DNS service type |
 | dnsmasq.additionalHostsEntries | list | `[]` | additional host entries |
 | dnsmasq.customDnsEntries | list | `[]` | custom dns entries |
 | dnsmasq.upstreamServers | list | `[]` | upstream dns servers |
