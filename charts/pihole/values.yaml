@@ -126,14 +126,6 @@ probes:
     failureThreshold: 3
     timeoutSeconds: 5
 
-dns:
-  service:
-    # dns.service.type -- DNS service type
-    type: ClusterIP
-    # Annotations to add to the service
-    # dns.service.annotations -- DNS service annotations
-    annotations: {}
-
 dhcp:
   # dhcp.enabled -- DHCP functionality toggle
   enabled: false
