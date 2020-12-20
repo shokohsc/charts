@@ -118,6 +118,20 @@ entries:
   openvpn-server:
   - apiVersion: v2
     appVersion: "2.4"
+    created: "2020-12-20T18:37:05.427366567Z"
+    description: Roll your own OpenVPN server
+    digest: c67452e745b0280f263e36b1fdc9bcaa95cf346f240fea15e9f3d3c597f9178a
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: openvpn-server
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/openvpn-server-0.1.7/openvpn-server-0.1.7.tgz
+    version: 0.1.7
+  - apiVersion: v2
+    appVersion: "2.4"
     created: "2020-12-08T21:04:37.863549113Z"
     description: Roll your own OpenVPN server
     digest: ac3d22a54f3f717a23717748e889c013ed245582e83a5f61a5ed9ba4cc64aa32
@@ -215,6 +229,20 @@ entries:
     - https://github.com/shokohsc/charts/releases/download/openvpn-server-0.1.0/openvpn-server-0.1.0.tgz
     version: 0.1.0
   pihole:
+  - apiVersion: v2
+    appVersion: v5.1.2
+    created: "2020-12-20T18:37:05.508108958Z"
+    description: A Helm chart for Kubernetes
+    digest: a0831207ad55eb30e7ff4006dda8a1873c80806c2aa891a0345fcb2df90028eb
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: pihole
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/pihole-0.1.2/pihole-0.1.2.tgz
+    version: 0.1.2
   - apiVersion: v2
     appVersion: v5.1.2
     created: "2020-12-08T21:04:38.008505889Z"
