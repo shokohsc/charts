@@ -118,6 +118,20 @@ entries:
   openvpn-client:
   - apiVersion: v2
     appVersion: latest
+    created: "2020-12-21T16:17:51.677903557Z"
+    description: A Helm chart for Kubernetes
+    digest: 8289dd13f11a0577c9da97060b57522891a1b2cfb10618b8a26ad29f3364634d
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: openvpn-client
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/openvpn-client-0.1.1/openvpn-client-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: latest
     created: "2020-12-20T19:11:02.108349833Z"
     description: A Helm chart for Kubernetes
     digest: 7ddf048eff6b8c2ac759874ef825c69d6372759300b2f3d2a7cf2a621aad0ada
@@ -131,6 +145,20 @@ entries:
     - https://github.com/shokohsc/charts/releases/download/openvpn-client-0.1.0/openvpn-client-0.1.0.tgz
     version: 0.1.0
   openvpn-server:
+  - apiVersion: v2
+    appVersion: "2.4"
+    created: "2020-12-21T16:17:51.7610659Z"
+    description: Roll your own OpenVPN server
+    digest: 9685f2f615f6b14fb939ed19f89066fa68e9ada9f895bcc5c0c7301201c26bee
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: openvpn-server
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/openvpn-server-0.1.8/openvpn-server-0.1.8.tgz
+    version: 0.1.8
   - apiVersion: v2
     appVersion: "2.4"
     created: "2020-12-20T18:37:05.427366567Z"
