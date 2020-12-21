@@ -77,10 +77,7 @@ spec:
               containerPort: 80
               protocol: TCP
             - containerPort: 53
-              name: dns-tcp
-              protocol: TCP
-            - containerPort: 53
-              name: dns-udp
+              name: dns
               protocol: UDP
           livenessProbe:
             httpGet:
@@ -143,10 +140,7 @@ spec:
             - -s
             - 127.0.0.1
           ports:
-            - name: dhcp-tcp
-              containerPort: 67
-              protocol: TCP
-            - name: dhcp-udp
+            - name: dhcp
               containerPort: 67
               protocol: UDP
           livenessProbe:
