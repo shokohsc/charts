@@ -104,6 +104,24 @@ spec:
           {{- range $nameserver := .Values.nameservers }}
           - {{ $nameserver }}
           {{- end }}
+      initContainers:
+        {{- range $sidecar := .Values.sidecars }}
+        {{- if $sidecar.configMap }}
+        - name: init-{{ $sidecar.configMap.name }}
+          image: busybox
+          command:
+            - cp
+            - {{ $sidecar.configMap.source }}
+            - {{ $sidecar.configMap.target }}
+          volumeMounts:
+            - name: {{ $sidecar.configMap.name }}
+              mountPath: {{ $sidecar.configMap.mountPath }}
+            {{- range $persistence := $sidecar.persistence }}
+            - name: {{ printf "%s-%s"  $sidecar.name $persistence.name }}
+              mountPath: {{ $persistence.mountPath }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:

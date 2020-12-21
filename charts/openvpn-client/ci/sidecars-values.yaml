@@ -63,6 +63,11 @@ sidecars:
           - ReadWriteOnce
         size: 1Gi
         annotations: {}
+    configMap:
+      name: deluge-settings
+      mountPath: /cfg
+      source: /cfg/core.conf
+      target: /config/core.conf
     envVars:
       TZ: UTC
       DELUGE_LOGLEVEL: error

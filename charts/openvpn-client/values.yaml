@@ -182,7 +182,7 @@ sidecars:
       #   annotations: {}
     # nfs:
     #   - name: download-complete
-    #     server: shared-0.shared.nfs.svc.cluster.local
+    #     server: nfs-shared-0.nfs-shared.nfs-shared.svc.cluster.local
     #     path: /
     #     mountPath: /downloads/complete
     configMap:
