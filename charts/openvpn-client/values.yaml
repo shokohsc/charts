@@ -108,6 +108,8 @@ tolerations: []
 affinity: {}
 
 persistence: {}
+  # persistence.storageClass -- PersistentVolumeClaim storage class
+  # storageClass: ""
 
 # https://github.com/dperson/openvpn-client
 # envVars -- Pod environment variables
