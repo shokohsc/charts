@@ -185,6 +185,7 @@ sidecars:
     #     server: nfs-shared-0.nfs-shared.nfs-shared.svc.cluster.local
     #     path: /
     #     mountPath: /downloads/complete
+    #     subPath: transmission
     configMap:
       name: transmission-settings
       mountPath: /cfg
