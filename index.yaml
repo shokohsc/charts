@@ -118,6 +118,20 @@ entries:
   openvpn-client:
   - apiVersion: v2
     appVersion: latest
+    created: "2020-12-22T19:47:23.100320516Z"
+    description: A Helm chart for Kubernetes
+    digest: dc72eb10456f4f112a325457cfcdca14d9668e28090ed5cb59529c2a1e1facac
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: openvpn-client
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/openvpn-client-0.1.5/openvpn-client-0.1.5.tgz
+    version: 0.1.5
+  - apiVersion: v2
+    appVersion: latest
     created: "2020-12-21T23:17:33.492498886Z"
     description: A Helm chart for Kubernetes
     digest: 2bc4cfac9f877d7b73903dafcc4b09d524bae2114d4ad101da87e36addb9c595
