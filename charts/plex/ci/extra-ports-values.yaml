@@ -1,0 +1,18 @@
+---
+extraPorts:
+  - name: gdm-first
+    containerPort: 32410
+    protocol: UDP
+    type: ClusterIP
+  - name: gdm-second
+    containerPort: 32412
+    protocol: UDP
+    type: ClusterIP
+  - name: gdm-third
+    containerPort: 32413
+    protocol: UDP
+    type: ClusterIP
+  - name: gdm-fourth
+    containerPort: 32414
+    protocol: UDP
+    type: ClusterIP
