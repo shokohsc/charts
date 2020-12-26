@@ -384,4 +384,19 @@ entries:
     urls:
     - https://github.com/shokohsc/charts/releases/download/pihole-0.1.0/pihole-0.1.0.tgz
     version: 0.1.0
+  plex:
+  - apiVersion: v2
+    appVersion: 1.21.1.3830-6c22540d5
+    created: "2020-12-26T18:25:44.695235148Z"
+    description: A Helm chart for Kubernetes
+    digest: 70aa340677f14ce14900ff3c8397247e1fa44fc7f9a62524f1175a520ed05a04
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: plex
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/plex-0.1.0/plex-0.1.0.tgz
+    version: 0.1.0
 generated: "2020-08-30T19:23:50.500148197Z"
