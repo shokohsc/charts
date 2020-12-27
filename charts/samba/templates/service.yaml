@@ -4,6 +4,10 @@ metadata:
   name: {{ include "samba.fullname" . }}-smb
   labels:
     {{- include "samba.labels" . | nindent 4 }}
+  {{- if .Values.service.annotations }}
+  annotations:
+    {{ toYaml .Values.service.annotations | indent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -21,6 +25,10 @@ metadata:
   name: {{ include "samba.fullname" . }}-netbios
   labels:
     {{- include "samba.labels" . | nindent 4 }}
+  {{- if .Values.service.annotations }}
+  annotations:
+    {{ toYaml .Values.service.annotations | indent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:
