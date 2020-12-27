@@ -442,4 +442,19 @@ entries:
     urls:
     - https://github.com/shokohsc/charts/releases/download/samba-0.1.0/samba-0.1.0.tgz
     version: 0.1.0
+  sftp:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2020-12-27T20:55:19.26007211Z"
+    description: A Helm chart for Kubernetes
+    digest: e9c4adf6f275c12de127e58edbc1194823e89618ce6cfa1167fe0fe75c92fc13
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: sftp
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/sftp-0.1.0/sftp-0.1.0.tgz
+    version: 0.1.0
 generated: "2020-08-30T19:23:50.500148197Z"
