@@ -402,6 +402,20 @@ entries:
   samba:
   - apiVersion: v2
     appVersion: latest
+    created: "2020-12-27T14:56:32.438168383Z"
+    description: A Helm chart for Kubernetes
+    digest: c441e2d1d23db172c8ba0f99447f4a95511b3c1f6278ec762ea2624ae4a61d94
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: samba
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/samba-0.1.1/samba-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: latest
     created: "2020-12-27T13:33:55.078680478Z"
     description: A Helm chart for Kubernetes
     digest: 6943c5cb1462c740f19f3e9348262804fcc3822d024ed4f2bd2b4434a3a1d5d7
