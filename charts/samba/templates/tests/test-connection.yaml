@@ -15,9 +15,9 @@ spec:
     - name: nc-smb
       image: busybox
       command: ['nc']
-      args: ['-v', '-z', '{{ include "samba.fullname" . }}', '{{ .Values.service.smb.port }}']
+      args: ['-v', '-z', '{{ include "samba.fullname" . }}-smb', '{{ .Values.service.smb.port }}']
     - name: nc-netbios
       image: busybox
       command: ['nc']
-      args: ['-v', '-z', '{{ include "samba.fullname" . }}', '{{ .Values.service.netbios.port }}']
+      args: ['-v', '-z', '{{ include "samba.fullname" . }}-netbios', '{{ .Values.service.netbios.port }}']
   restartPolicy: Never
