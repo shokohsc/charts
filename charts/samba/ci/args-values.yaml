@@ -1,0 +1,5 @@
+---
+args:
+  - -s
+  - "shared;/mount;yes;no;yes;all;none"
+  - -p

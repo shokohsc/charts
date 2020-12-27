@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "samba.fullname" . }}
+  labels:
+    {{- include "samba.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "samba.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "samba.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "samba.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.args }}
+          args:
+            {{- range $arg := .Values.args }}
+            - {{ $arg }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: smb
+              containerPort: 445
+              protocol: TCP
+            - name: netbios
+              containerPort: 139
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: smb
+          readinessProbe:
+            tcpSocket:
+              port: smb
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            {{- range $nfs := .Values.nfsVolumes }}
+            - name: {{ $nfs.name }}
+              mountPath: {{ $nfs.mountPath }}
+              {{- if $nfs.subPath }}
+              subPath: {{ $nfs.subPath }}
+              {{- end }}
+              readOnly: false
+            {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        {{- range $nfs := .Values.nfsVolumes }}
+        - name: {{ $nfs.name }}
+          nfs:
+            server: {{ $nfs.server }}
+            path: {{ $nfs.path }}
+          {{- if $nfs.mountOptions }}
+          mountOptions:
+            {{- range $option := $nfs.mountOptions }}
+            - {{ $option }}
+            {{- end }}
+          {{- end }}
+        {{- end }}
