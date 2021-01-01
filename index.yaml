@@ -1,5 +1,20 @@
 apiVersion: v1
 entries:
+  comics:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2021-01-01T01:26:28.848106921Z"
+    description: A Helm chart for Kubernetes
+    digest: 760524f3996995423f0b39fb9d508c2a4297a1dda62fda5e67b2c8dade912677
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: comics
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/comics-0.1.0/comics-0.1.0.tgz
+    version: 0.1.0
   commander:
   - apiVersion: v2
     appVersion: 14.9.3-alpine
@@ -71,6 +86,21 @@ entries:
     type: application
     urls:
     - https://github.com/shokohsc/charts/releases/download/duckdns-0.1.0/duckdns-0.1.0.tgz
+    version: 0.1.0
+  home:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2021-01-01T01:26:28.956127046Z"
+    description: A Helm chart for Kubernetes
+    digest: 8cbf2296edd1a6e4ae9072a76c6ae314bccc7c644fc62240566c24f90ebc0a1b
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: home
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/home-0.1.0/home-0.1.0.tgz
     version: 0.1.0
   nfs:
   - apiVersion: v2
