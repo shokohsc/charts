@@ -502,4 +502,24 @@ entries:
     urls:
     - https://github.com/shokohsc/charts/releases/download/symfony-0.1.0/symfony-0.1.0.tgz
     version: 0.1.0
+  wekan:
+  - apiVersion: v2
+    appVersion: v3.50
+    created: "2021-01-02T23:35:54.968709905Z"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.3.3
+    description: A Helm chart for Kubernetes
+    digest: ddcf58bea60b6ef904bf5f3b843eecda94ea8c92d4c703564715e3057ddd2869
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: wekan
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/wekan-0.1.0/wekan-0.1.0.tgz
+    version: 0.1.0
 generated: "2020-08-30T19:23:50.500148197Z"
