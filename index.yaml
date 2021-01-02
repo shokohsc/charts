@@ -490,6 +490,20 @@ entries:
   symfony:
   - apiVersion: v2
     appVersion: latest
+    created: "2021-01-02T23:46:37.709710707Z"
+    description: A Helm chart for Kubernetes
+    digest: d3053a45da5b483f8d79733295c4c371ae8d4cd799970fc7f766088902667953
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: symfony
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/symfony-0.1.1/symfony-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: latest
     created: "2021-01-02T11:13:59.9903202Z"
     description: A Helm chart for Kubernetes
     digest: 062be6fd399abcc46e76d693995afaf8f9de568261e6507a8cf6244cf8454a00
