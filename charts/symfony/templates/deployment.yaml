@@ -29,7 +29,7 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- with .Values.initContainers }}
       initContainers:
-        {{- toYaml .Values.initContainers | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}-php
@@ -51,7 +51,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.php.volumeMounts }}
           volumeMounts:
-          {{- toYaml .Values.php.volumeMounts | nindent 12 }}
+          {{- toYaml . | nindent 12 }}
           {{- end }}
         - name: {{ .Chart.Name }}-nginx
           securityContext:
@@ -74,7 +74,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.nginx.volumeMounts }}
           volumeMounts:
-          {{- toYaml .Values.nginx.volumeMounts | nindent 12 }}
+          {{- toYaml . | nindent 12 }}
           {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
@@ -90,5 +90,5 @@ spec:
       {{- end }}
       {{- with .Values.extraVolumes }}
       volumes:
-      {{- toYaml .extraVolumes | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
