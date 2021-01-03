@@ -457,6 +457,21 @@ entries:
     urls:
     - https://github.com/shokohsc/charts/releases/download/sftp-0.1.0/sftp-0.1.0.tgz
     version: 0.1.0
+  symfony:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2021-01-03T01:25:54.613597284Z"
+    description: A Helm chart for Kubernetes
+    digest: 1b52532ef6e87c8fbb2ed9d8a86299ab208ed7b80c22b733cf7b9bb65329943b
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: symfony
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/symfony-0.1.1/symfony-0.1.1.tgz
+    version: 0.1.1
   wekan:
   - apiVersion: v2
     appVersion: v3.50
