@@ -1,20 +1,5 @@
 apiVersion: v1
 entries:
-  comics:
-  - apiVersion: v2
-    appVersion: latest
-    created: "2021-01-01T01:26:28.848106921Z"
-    description: A Helm chart for Kubernetes
-    digest: 760524f3996995423f0b39fb9d508c2a4297a1dda62fda5e67b2c8dade912677
-    home: https://shokohsc.github.io/charts/
-    maintainers:
-    - email: shokohsc@gmail.com
-      name: shokohsc
-    name: comics
-    type: application
-    urls:
-    - https://github.com/shokohsc/charts/releases/download/comics-0.1.0/comics-0.1.0.tgz
-    version: 0.1.0
   commander:
   - apiVersion: v2
     appVersion: 14.9.3-alpine
@@ -86,21 +71,6 @@ entries:
     type: application
     urls:
     - https://github.com/shokohsc/charts/releases/download/duckdns-0.1.0/duckdns-0.1.0.tgz
-    version: 0.1.0
-  home:
-  - apiVersion: v2
-    appVersion: latest
-    created: "2021-01-01T01:26:28.956127046Z"
-    description: A Helm chart for Kubernetes
-    digest: 8cbf2296edd1a6e4ae9072a76c6ae314bccc7c644fc62240566c24f90ebc0a1b
-    home: https://shokohsc.github.io/charts/
-    maintainers:
-    - email: shokohsc@gmail.com
-      name: shokohsc
-    name: home
-    type: application
-    urls:
-    - https://github.com/shokohsc/charts/releases/download/home-0.1.0/home-0.1.0.tgz
     version: 0.1.0
   nfs:
   - apiVersion: v2
@@ -486,35 +456,6 @@ entries:
     type: application
     urls:
     - https://github.com/shokohsc/charts/releases/download/sftp-0.1.0/sftp-0.1.0.tgz
-    version: 0.1.0
-  symfony:
-  - apiVersion: v2
-    appVersion: latest
-    created: "2021-01-02T23:46:37.709710707Z"
-    description: A Helm chart for Kubernetes
-    digest: d3053a45da5b483f8d79733295c4c371ae8d4cd799970fc7f766088902667953
-    home: https://shokohsc.github.io/charts/
-    maintainers:
-    - email: shokohsc@gmail.com
-      name: shokohsc
-    name: symfony
-    type: application
-    urls:
-    - https://github.com/shokohsc/charts/releases/download/symfony-0.1.1/symfony-0.1.1.tgz
-    version: 0.1.1
-  - apiVersion: v2
-    appVersion: latest
-    created: "2021-01-02T11:13:59.9903202Z"
-    description: A Helm chart for Kubernetes
-    digest: 062be6fd399abcc46e76d693995afaf8f9de568261e6507a8cf6244cf8454a00
-    home: https://shokohsc.github.io/charts/
-    maintainers:
-    - email: shokohsc@gmail.com
-      name: shokohsc
-    name: symfony
-    type: application
-    urls:
-    - https://github.com/shokohsc/charts/releases/download/symfony-0.1.0/symfony-0.1.0.tgz
     version: 0.1.0
   wekan:
   - apiVersion: v2
