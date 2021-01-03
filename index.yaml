@@ -1,5 +1,20 @@
 apiVersion: v1
 entries:
+  commafeed:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2021-01-03T12:55:13.796701818Z"
+    description: A Helm chart for Kubernetes
+    digest: 7b2d5f08a58a2e1e0fd5c0457c15cfb478b4c188061cbe6af07cdc817e3ce3ac
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: commafeed
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/commafeed-0.1.0/commafeed-0.1.0.tgz
+    version: 0.1.0
   commander:
   - apiVersion: v2
     appVersion: 14.9.3-alpine
@@ -472,6 +487,36 @@ entries:
     urls:
     - https://github.com/shokohsc/charts/releases/download/symfony-0.1.1/symfony-0.1.1.tgz
     version: 0.1.1
+  theia:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2021-01-03T12:55:13.915603539Z"
+    description: A Helm chart for Kubernetes
+    digest: c576d8dc62f7a501cc4bb0ce46591c199f84312b7a4b721cfacd04711a75deca
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: theia
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/theia-0.1.0/theia-0.1.0.tgz
+    version: 0.1.0
+  thelounge:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2021-01-03T12:55:14.057294382Z"
+    description: A Helm chart for Kubernetes
+    digest: 732c827ef54a1418075a075ea81b21fe22f665d5ec60704c1c9d4a90205b5ab3
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: thelounge
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/thelounge-0.1.0/thelounge-0.1.0.tgz
+    version: 0.1.0
   wekan:
   - apiVersion: v2
     appVersion: v3.50
