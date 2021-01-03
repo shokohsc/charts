@@ -87,6 +87,21 @@ entries:
     urls:
     - https://github.com/shokohsc/charts/releases/download/duckdns-0.1.0/duckdns-0.1.0.tgz
     version: 0.1.0
+  heimdall:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2021-01-03T18:08:21.516962635Z"
+    description: A Helm chart for Kubernetes
+    digest: 9bef1b879892786e8c3c5e54e97a23defc724dbcbce648ff21c6eeabd996a8a4
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: heimdall
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/heimdall-0.1.0/heimdall-0.1.0.tgz
+    version: 0.1.0
   nfs:
   - apiVersion: v2
     appVersion: v0.0.2
