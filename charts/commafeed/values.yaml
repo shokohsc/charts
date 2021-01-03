@@ -1,0 +1,166 @@
+# Default values for plex.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# replicaCount -- pods replica count
+replicaCount: 1
+
+image:
+  # image.repository -- container image repository
+  repository: saggio/commafeed
+  # image.pullPolicy -- container image pull policy
+  pullPolicy: IfNotPresent
+  # image.tag -- container image tag or Chart appVersion if undefined
+  tag: ""
+
+# imagePullSecrets -- registry secret
+imagePullSecrets: []
+# nameOverride -- release name override option
+nameOverride: ""
+# fullnameOverride -- release full release name override option
+fullnameOverride: ""
+
+serviceAccount:
+  # serviceAccount.create -- Specifies whether a service account should be created
+  create: true
+  # serviceAccount.annotations -- Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  # serviceAccount.name -- The name of the service account to use
+  name: ""
+
+# podAnnotations -- Pod annotations
+podAnnotations: {}
+
+# podSecurityContext -- Pod security group context
+podSecurityContext: {}
+  # fsGroup: 2000
+
+# securityContext -- Deployment security group context
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  # service.type -- Service type
+  type: ClusterIP
+  # service.port -- Service port
+  port: 8082
+  # service.annotations -- Service annotations
+  annotations: {}
+
+ingress:
+  # ingress.enabled -- Ingress toggle
+  enabled: false
+  # ingress.annotations -- Ingress annotations
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  # ingress.hosts -- Ingress hosts entries
+  hosts:
+    - host: chart-example.local
+      paths: []
+  # ingress.tls -- Ingress tls entries
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+# resources -- pod resource requests & limits
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  # autoscaling.enabled -- HorizontalPodAutoscaler toggle
+  enabled: false
+  # autoscaling.minReplicas -- HorizontalPodAutoscaler minimum replicas
+  minReplicas: 1
+  # autoscaling.maxReplicas -- HorizontalPodAutoscaler maximum replicas
+  maxReplicas: 100
+  # autoscaling.targetCPUUtilizationPercentage -- HorizontalPodAutoscaler targetCPUUtilizationPercentage
+  targetCPUUtilizationPercentage: 80
+  # autoscaling.targetMemoryUtilizationPercentage -- HorizontalPodAutoscaler targetMemoryUtilizationPercentage
+  # targetMemoryUtilizationPercentage: 80
+
+# nodeSelector -- node labels for pod assignment
+nodeSelector: {}
+
+# tolerations -- node taints to tolerate (requires Kubernetes >=1.6)
+tolerations: []
+
+# affinity -- node/pod affinities (requires Kubernetes >=1.6)
+affinity: {}
+
+# envVars -- Pod environment variables
+envVars: {}
+
+# extraVolumes -- Pod extra volumes
+extraVolumes: {}
+  # volumeMounts:
+  #   - name: some_volume
+  #     mountPath: /mnt/some_volume
+  # volumes:
+  #   - name: some_volume
+  #     nfs:
+  #       server: nfs.domain.tld
+  #       path: /
+
+# initContainers -- Pod init containers
+initContainers: []
+  # - name: hello
+  #   image: busybox
+  #   command: ["/bin/sh", "-c", "echo hello"]
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  # persistent.enabled -- set to true to use pvc
+  enabled: false
+  # persistence.existingClaim -- Existing PersistentVolumeClaim
+  # existingClaim:
+
+  ## Data volume mount path
+  ##
+  # persistence.mountPath -- PersistentVolumeClaim mounting path
+  mountPath: /data
+
+  ## Persistent Volume Access Mode
+  ##
+  # persistence.accessModes -- PersistentVolumeClaim access modes
+  accessModes:
+    - ReadWriteOnce
+
+  ## Persistent Volume size
+  ##
+  # persistence.size -- PersistentVolumeClaim size request
+  size: 1Gi
+
+  ## Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # persistence.storageClass -- PersistentVolumeClaim storage class
+  # storageClass: "-"
+
+  ## Persistent Volume Claim annotations
+  ##
+  # persistence.annotations -- PersistentVolumeClaim annotations
+  annotations: {}
