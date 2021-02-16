@@ -11,7 +11,6 @@ spec:
     spec:
       template:
         spec:
-          serviceAccountName: {{ include "duckdns.serviceAccountName" . }}
           containers:
           - name: {{ include "duckdns.fullname" . }}
             image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -23,10 +22,22 @@ spec:
                   secretKeyRef:
                     key: {{ .Values.secret.tokenKey | default "token" }}
                     name: {{ .Values.secret.existingSecret | default (include "duckdns.token-secret" .) }}
-              {{- range $key, $value := .Values.extraEnvVars }}
-              - name: {{ $key | quote }}
+              {{- range $name, $value := .Values.extraEnvVars }}
+              - name: {{ $name | quote }}
                 value: {{ $value | quote }}
               {{- end }}
+            command:
+              - /bin/sh
+              - -c
             args:
-              - "https://www.duckdns.org/update?domains=$SUBDOMAINS&token=$TOKEN&ip="
+              - /tmp/duckdns.sh
+            volumeMounts:
+              - name: {{ include "duckdns.fullname" . }}-duckdns-script
+                mountPath: /tmp/duckdns.sh
+                subPath: duckdns.sh
           restartPolicy: {{ .Values.cronjob.restartPolicy }}
+          volumes:
+            - name: {{ include "duckdns.fullname" . }}-duckdns-script
+              configMap:
+                name: {{ include "duckdns.fullname" . }}-duckdns-script
+                defaultMode: 0755

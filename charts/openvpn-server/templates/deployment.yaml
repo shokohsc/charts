@@ -2,27 +2,20 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "openvpn-server.fullname" . }}-{{ .Values.service.protocol | lower }}
-  labels:
-    app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
-    helm.sh/chart: {{ include "openvpn-server.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "openvpn-server.labels" . | nindent 4 }}
+  annotations:
     {{- with .Values.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
-  strategy:
-    type: RollingUpdate
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- include "openvpn-server.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- include "openvpn-server.selectorLabels" . | nindent 8 }}
     spec:
       containers:
         - image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -42,8 +35,11 @@ spec:
               add:
                 - NET_ADMIN
           volumeMounts:
-            - name: data
-              mountPath: {{ .Values.persistence.mountPath }}
+            - name: {{ include "openvpn-server.fullname" . }}
+              mountPath: /etc/openvpn
+          {{- with .Values.extraVolumes }}
+            {{- toYaml .volumeMounts | nindent 12 }}
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
@@ -59,36 +55,32 @@ spec:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       volumes:
-        - name: data
+        - name: {{ include "openvpn-server.fullname" . }}
           persistentVolumeClaim:
-            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.name" . }}{{- end }}
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.fullname" . }}{{- end }}
+      {{- with .Values.extraVolumes.volumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
 ---
 {{- if .Values.service.fallback }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "openvpn-server.fullname" . }}-{{ include "openvpn-server.fallbackProtocol" . }}
-  labels:
-    app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
-    helm.sh/chart: {{ include "openvpn-server.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "openvpn-server.labels" . | nindent 4 }}
+  annotations:
     {{- with .Values.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
-  strategy:
-    type: RollingUpdate
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- include "openvpn-server.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- include "openvpn-server.selectorLabels" . | nindent 8 }}
     spec:
       containers:
         - image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -108,8 +100,11 @@ spec:
               add:
                 - NET_ADMIN
           volumeMounts:
-            - name: data
-              mountPath: {{ .Values.persistence.mountPath }}
+            - name: {{ include "openvpn-server.fullname" . }}
+              mountPath: /etc/openvpn
+          {{- with .Values.extraVolumes.volumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
@@ -125,7 +120,10 @@ spec:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       volumes:
-        - name: data
+        - name: {{ include "openvpn-server.fullname" . }}
           persistentVolumeClaim:
-            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.name" . }}{{- end }}
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.fullname" . }}{{- end }}
+      {{- with .Values.extraVolumes.volumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
 {{- end }}

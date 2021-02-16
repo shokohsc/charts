@@ -15,5 +15,9 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+    - port: 8084
+      targetPort: admin
+      protocol: TCP
+      name: admin
   selector:
     {{- include "commafeed.selectorLabels" . | nindent 4 }}

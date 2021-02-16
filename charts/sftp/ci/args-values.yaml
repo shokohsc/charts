@@ -1,3 +1,11 @@
 ---
 args:
   - "admin:password:1001"
+
+extraVolumes:
+  volumeMounts:
+    - name: admin
+      mountPath: /home/admin/upload
+  volumes:
+    - name: admin
+      emptyDir: {}

@@ -49,14 +49,3 @@ Selector labels
 app.kubernetes.io/name: {{ include "samba.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "samba.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "samba.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}

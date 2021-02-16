@@ -2,6 +2,11 @@
 dhcp:
   enabled: true
 
+securityContext:
+  capabilities:
+    add:
+      - "NET_ADMIN"
+
 extraEnvVars:
   BLOCKING_ENABLED: true
   DHCP_ACTIVE: true

@@ -1,6 +1,6 @@
 # openvpn-server
 
-![Version: 0.1.8](https://img.shields.io/badge/Version-0.1.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.4](https://img.shields.io/badge/AppVersion-2.4-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.4](https://img.shields.io/badge/AppVersion-2.4-informational?style=flat-square)
 
 Roll your own OpenVPN server
 
@@ -31,6 +31,7 @@ Roll your own OpenVPN server
 | externalHostname | string | `"domain.tld"` | Hostname OR Ip of cluster openvpn entrypoint, default to 'domain.tld' so you must define it |
 | externalPort | string | `""` | Port cluster openvpn entrypoint, defaults to service.port (nodePort) |
 | extraOptions | list | `[]` | Additional options for openvpn configuration |
+| extraVolumes | object | `{}` | Pod extra volumes |
 | fullnameOverride | string | `""` | release full release name override option |
 | image.pullPolicy | string | `"IfNotPresent"` | container image pull policy |
 | image.repository | string | `"kylemanna/openvpn"` | container image repository |
@@ -42,8 +43,7 @@ Roll your own OpenVPN server
 | nodeSelector | object | `{}` | node labels for pod assignment |
 | persistence.accessModes | list | `["ReadWriteOnce"]` | PersistentVolumeClaim access modes |
 | persistence.annotations | object | `{}` | PersistentVolumeClaim annotations |
-| persistence.mountPath | string | `"/etc/openvpn"` | PersistentVolumeClaim mounting path |
-| persistence.size | string | `"200Mi"` | PersistentVolumeClaim size request |
+| persistence.size | string | `"1Gi"` | PersistentVolumeClaim size request |
 | replicaCount | int | `1` | pods replica count |
 | resources | object | `{}` | pod resource requests & limits |
 | service.annotations | object | `{}` | Service annotations |

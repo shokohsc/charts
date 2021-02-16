@@ -1,6 +1,6 @@
 # theia
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -17,10 +17,6 @@ A Helm chart for Kubernetes
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | affinity | object | `{}` | node/pod affinities (requires Kubernetes >=1.6) |
-| autoscaling.enabled | bool | `false` | HorizontalPodAutoscaler toggle |
-| autoscaling.maxReplicas | int | `100` | HorizontalPodAutoscaler maximum replicas |
-| autoscaling.minReplicas | int | `1` | HorizontalPodAutoscaler minimum replicas |
-| autoscaling.targetCPUUtilizationPercentage | int | `80` | HorizontalPodAutoscaler targetCPUUtilizationPercentage |
 | envVars | object | `{}` | Pod environment variables |
 | extraVolumes | object | `{}` | Pod extra volumes |
 | fullnameOverride | string | `""` | release full release name override option |
@@ -28,10 +24,6 @@ A Helm chart for Kubernetes
 | image.repository | string | `"theiaide/theia"` | container image repository |
 | image.tag | string | `""` | container image tag or Chart appVersion if undefined |
 | imagePullSecrets | list | `[]` | registry secret |
-| ingress.annotations | object | `{}` | Ingress annotations |
-| ingress.enabled | bool | `false` | Ingress toggle |
-| ingress.hosts | list | `[{"host":"chart-example.local","paths":[]}]` | Ingress hosts entries |
-| ingress.tls | list | `[]` | Ingress tls entries |
 | initContainers | list | `[]` | Pod init containers |
 | nameOverride | string | `""` | release name override option |
 | nodeSelector | object | `{}` | node labels for pod assignment |
@@ -48,9 +40,6 @@ A Helm chart for Kubernetes
 | service.annotations | object | `{}` | Service annotations |
 | service.port | int | `3000` | Service port |
 | service.type | string | `"ClusterIP"` | Service type |
-| serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
-| serviceAccount.create | bool | `true` | Specifies whether a service account should be created |
-| serviceAccount.name | string | `""` | The name of the service account to use |
 | tolerations | list | `[]` | node taints to tolerate (requires Kubernetes >=1.6) |
 
 ----------------------------------------------

@@ -1,17 +1,14 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: {{ include "nfs.fullname" . }}
   labels:
     {{- include "nfs.labels" . | nindent 4 }}
 spec:
-{{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-{{- end }}
   selector:
     matchLabels:
       {{- include "nfs.selectorLabels" . | nindent 6 }}
-  serviceName: {{ include "nfs.fullname" . }}
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -25,7 +22,6 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "nfs.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -42,26 +38,18 @@ spec:
             - name: nfs
               containerPort: 2049
               protocol: TCP
-          volumeMounts:
-            {{- range .Values.volumes }}
-            - name: {{ .name }}
-              mountPath: {{ .mountPath }}
-              readOnly: false
-            {{- end }}
           livenessProbe:
             tcpSocket:
               port: nfs
           readinessProbe:
             tcpSocket:
               port: nfs
+          {{- with .Values.extraVolumes }}
+          volumeMounts:
+            {{- toYaml .volumeMounts | nindent 12 }}
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-      volumes:
-        {{- range .Values.volumes }}
-        - name: {{ .name }}
-          hostPath:
-            path: {{ .path }}
-        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -73,4 +61,8 @@ spec:
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.extraVolumes }}
+      volumes:
+        {{- toYaml .volumes | nindent 8 }}
       {{- end }}

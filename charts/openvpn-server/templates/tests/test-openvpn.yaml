@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: Pod
 metadata:
@@ -5,8 +6,8 @@ metadata:
   labels:
     {{- include "openvpn-server.labels" . | nindent 4 }}
   annotations:
-    "helm.sh/hook": "test"
-    "helm.sh/hook-weight": "25"
+    "helm.sh/hook": "post-install,test"
+    "helm.sh/hook-weight": "30"
 spec:
   containers:
     - name: generate-client
@@ -43,12 +44,12 @@ spec:
         - name: EASYRSA_CRL_DAYS
           value: {{ .Values.easyrsa.crlDays | quote  }}
       volumeMounts:
-        - name: data
-          mountPath: {{ .Values.persistence.mountPath }}
+        - name: {{ include "openvpn-server.fullname" . }}
+          mountPath: /etc/openvpn
   volumes:
-    - name: data
+    - name: {{ include "openvpn-server.fullname" . }}
       persistentVolumeClaim:
-        claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.name" . }}{{- end }}
+        claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.fullname" . }}{{- end }}
   restartPolicy: Never
 ---
 apiVersion: v1
@@ -58,8 +59,8 @@ metadata:
   labels:
     {{- include "openvpn-server.labels" . | nindent 4 }}
   annotations:
-    "helm.sh/hook": "test"
-    "helm.sh/hook-weight": "30"
+    "helm.sh/hook": "post-install,test"
+    "helm.sh/hook-weight": "35"
 spec:
   containers:
     - name: get-client
@@ -69,13 +70,13 @@ spec:
       args:
         - {{ .Release.Name }}
       volumeMounts:
-        - name: data
-          mountPath: {{ .Values.persistence.mountPath }}
+        - name: {{ include "openvpn-server.fullname" . }}
+          mountPath: /etc/openvpn
   restartPolicy: Never
   volumes:
-    - name: data
+    - name: {{ include "openvpn-server.fullname" . }}
       persistentVolumeClaim:
-        claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.name" . }}{{- end }}
+        claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.fullname" . }}{{- end }}
 ---
 apiVersion: v1
 kind: Pod
@@ -84,8 +85,8 @@ metadata:
   labels:
     {{- include "openvpn-server.labels" . | nindent 4 }}
   annotations:
-    "helm.sh/hook": "test"
-    "helm.sh/hook-weight": "35"
+    "helm.sh/hook": "post-install,test"
+    "helm.sh/hook-weight": "40"
 spec:
   containers:
     - name: list-client
@@ -93,13 +94,13 @@ spec:
       command:
         - /usr/local/bin/ovpn_listclients
       volumeMounts:
-        - name: data
-          mountPath: {{ .Values.persistence.mountPath }}
+        - name: {{ include "openvpn-server.fullname" . }}
+          mountPath: /etc/openvpn
   restartPolicy: Never
   volumes:
-    - name: data
+    - name: {{ include "openvpn-server.fullname" . }}
       persistentVolumeClaim:
-        claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.name" . }}{{- end }}
+        claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.fullname" . }}{{- end }}
 ---
 apiVersion: v1
 kind: Pod
@@ -108,8 +109,8 @@ metadata:
   labels:
     {{- include "openvpn-server.labels" . | nindent 4 }}
   annotations:
-    "helm.sh/hook": "test"
-    "helm.sh/hook-weight": "40"
+    "helm.sh/hook": "post-install,test"
+    "helm.sh/hook-weight": "45"
 spec:
   containers:
     - name: delete-client
@@ -141,10 +142,10 @@ spec:
               {{- end }}
               key: openvpn-server-passphrase
       volumeMounts:
-        - name: data
-          mountPath: {{ .Values.persistence.mountPath }}
+        - name: {{ include "openvpn-server.fullname" . }}
+          mountPath: /etc/openvpn
   restartPolicy: Never
   volumes:
-    - name: data
+    - name: {{ include "openvpn-server.fullname" . }}
       persistentVolumeClaim:
-        claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.name" . }}{{- end }}
+        claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.fullname" . }}{{- end }}

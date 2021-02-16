@@ -1,0 +1,23 @@
+---
+extraVolumes:
+  volumeMounts:
+    - name: data
+      mountPath: /data
+    - name: config
+      mountPath: /config
+  volumes:
+    - name: data
+      emptyDir: {}
+    - name: config
+      emptyDir: {}
+
+initContainers:
+  - name: 00-config
+    image: curlimages/curl
+    args:
+      - -Lo
+      - /config/config.yml
+      - "https://raw.githubusercontent.com/Athou/commafeed/master/config.yml.example"
+    volumeMounts:
+      - name: config
+        mountPath: /config

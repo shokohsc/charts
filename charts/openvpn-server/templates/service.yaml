@@ -2,11 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: "{{ include "openvpn-server.fullname" . }}-{{ .Values.service.protocol | lower }}"
-  labels:
-    app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
-    helm.sh/chart: {{ include "openvpn-server.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "openvpn-server.labels" . | nindent 4 }}
   {{- if .Values.service.annotations }}
   annotations:
     {{ toYaml .Values.service.annotations | indent 4 }}
@@ -33,11 +29,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: "{{ include "openvpn-server.fullname" . }}-{{ include "openvpn-server.fallbackProtocol" . }}"
-  labels:
-    app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
-    helm.sh/chart: {{ include "openvpn-server.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "openvpn-server.labels" . | nindent 4 }}
   {{- if .Values.service.annotations }}
   annotations:
     {{ toYaml .Values.service.annotations | indent 4 }}

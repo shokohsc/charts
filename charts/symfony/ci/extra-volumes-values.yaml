@@ -1,0 +1,16 @@
+---
+extraVolumes:
+  - name: app
+    emptyDir: {}
+
+php:
+  extraVolumes:
+    volumeMounts:
+      - name: app
+        mountPath: /var/www/symfony
+
+nginx:
+  extraVolumes:
+    volumeMounts:
+      - name: app
+        mountPath: /var/www/symfony

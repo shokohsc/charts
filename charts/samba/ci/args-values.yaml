@@ -1,5 +1,13 @@
 ---
 args:
   - -s
-  - "shared;/mount;yes;no;yes;all;none"
+  - "shared;/mnt;yes;no;yes;all;none"
   - -p
+
+extraVolumes:
+  volumeMounts:
+    - name: data
+      mountPath: /mnt/data
+  volumes:
+    - name: data
+      emptyDir: {}

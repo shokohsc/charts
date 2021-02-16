@@ -1,14 +1,14 @@
-{{- $ctx := . }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "openvpn-client.fullname" . }}-sidekick
   labels:
     {{- include "openvpn-client.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-10"
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "openvpn-client.selectorLabels" . | nindent 6 }}
@@ -25,7 +25,6 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "openvpn-client.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.sidekick.podSecurityContext | nindent 8 }}
       containers:
@@ -35,6 +34,8 @@ spec:
           image: "{{ .Values.sidekick.image.repository }}:{{ .Values.sidekick.image.tag }}"
           imagePullPolicy: {{ .Values.sidekick.image.pullPolicy }}
           env:
+            - name: NODE_ENV
+              value: production
             {{- range $key, $value := .Values.sidekick.envVars }}
             - name: {{ $key | quote }}
               value: {{ $value | quote }}
@@ -43,6 +44,10 @@ spec:
             - name: http
               containerPort: 3000
               protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /api
+              port: http
           livenessProbe:
             httpGet:
               path: /api
@@ -73,12 +78,8 @@ metadata:
   name: {{ include "openvpn-client.fullname" . }}
   labels:
     {{- include "openvpn-client.labels" . | nindent 4 }}
-  annotations:
-    "helm.sh/hook-weight": "10"
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "openvpn-client.selectorLabels" . | nindent 6 }}
@@ -95,39 +96,26 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "openvpn-client.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      dnsPolicy: "ClusterFirst"
-      dnsConfig:
-        nameservers:
-          {{- range $nameserver := .Values.nameservers }}
-          - {{ $nameserver }}
-          {{- end }}
+      dnsPolicy: ClusterFirst
       initContainers:
-        {{- range $sidecar := .Values.sidecars }}
-        {{- if $sidecar.configMap }}
-        - name: init-{{ $sidecar.configMap.name }}
-          image: busybox
-          command:
-            - cp
-            - {{ $sidecar.configMap.source }}
-            - {{ $sidecar.configMap.target }}
-          volumeMounts:
-            - name: {{ $sidecar.configMap.name }}
-              mountPath: {{ $sidecar.configMap.mountPath }}
-            {{- range $persistence := $sidecar.persistence }}
-            - name: {{ printf "%s-%s"  $sidecar.name $persistence.name }}
-              mountPath: {{ $persistence.mountPath }}
-            {{- end }}
-        {{- end }}
-        {{- end }}
+        - name: curl-sidekick
+          image: curlimages/curl
+          imagePullPolicy: IfNotPresent
+          args:
+            - -GLs
+            - "http://{{ include "openvpn-client.fullname" . }}-sidekick:{{ .Values.sidekick.service.port }}/api/"
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - /bin/sh
+            - -c
+            - /usr/bin/sidekick.sh
           env:
             - name: SIDEKICK_URL
               value: "http://{{ include "openvpn-client.fullname" . }}-sidekick:{{ .Values.sidekick.service.port }}/api/ovpn"
@@ -135,98 +123,48 @@ spec:
             - name: {{ $key | quote }}
               value: {{ $value | quote }}
             {{- end }}
-            {{- range $index, $sidecar := .Values.sidecars }}
-            - name: {{ printf "%s_%d" "VPN_PORT" (add (index $index) 1) }}
-              value: {{ $sidecar.service.port | quote }}
+            {{- range $index, $port := .Values.extraPorts }}
+            - name: {{ printf "%s_%d" "VPNPORT" (add (index $index) 1) }}
+              value: {{ $port | quote }}
             {{- end }}
+          {{- if .Values.extraPorts }}
           ports:
-            {{- range $sidecar := .Values.sidecars }}
-            - name: {{ $sidecar.name }}
-              containerPort: {{ $sidecar.service.port }}
-              protocol: TCP
+            {{- range $port := .Values.extraPorts }}
+            - name: {{ $port.name }}
+              containerPort: {{ $port.containerPort }}
+              protocol: {{ $port.protocol | default "TCP" }}
             {{- end }}
-          startupProbe:
-          # The kubelet uses startup probes to know when a container application has started.
-          # If such a probe is configured, it disables liveness and readiness checks until it succeeds,
-          # making sure those probes don't interfere with the application startup.
-          # This can be used to adopt liveness checks on slow starting containers,
-          # avoiding them getting killed by the kubelet before they are up and running.
-            exec:
-              command:
-                - sh
-                - -c
-                - ps -fe | grep "open[v]pn --cd /vpn --config /vpn/vpn_conf.ovpn"
-            failureThreshold: 1
-          livenessProbe:
-          # The kubelet uses liveness probes to know when to restart a container.
-          # For example, liveness probes could catch a deadlock, where an application is running, but unable to make progress.
-          # Restarting a container in such a state can help to make the application more available despite bugs.
-            exec:
-              command:
-                - sh
-                - -c
-                - ps -fe | grep "open[v]pn --cd /vpn --config /vpn/vpn_conf.ovpn"
-            failureThreshold: 1
-          readinessProbe:
-          # The kubelet uses readiness probes to know when a container is ready to start accepting traffic.
-          # A Pod is considered ready when all of its containers are ready.
-          # One use of this signal is to control which Pods are used as backends for Services.
-          # When a Pod is not ready, it is removed from Service load balancers.
-            exec:
-              command:
-                - sh
-                - -c
-                - ps -fe | grep "open[v]pn --cd /vpn --config /vpn/vpn_conf.ovpn"
-            failureThreshold: 1
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-        {{- range $sidecar := .Values.sidecars }}
-        - name: {{ $sidecar.name | quote }}
-          image: "{{ $sidecar.image.repository }}:{{ $sidecar.image.tag }}"
-          imagePullPolicy: {{ $sidecar.image.pullPolicy }}
-          env:
-            {{- range $key, $value := $sidecar.envVars }}
-            - name: {{ $key | quote }}
-              value: {{ $value | quote }}
-            {{- end }}
-          {{- if $sidecar.startupProbe }}
-          startupProbe:
-            exec:
-              command:
-                - sh
-                - -c
-                - {{ $sidecar.startupProbe }}
-            initialDelaySeconds: 10
           {{- end }}
           livenessProbe:
             exec:
               command:
-                - curl
-                - -sIfkLX
-                - GET
-                - "http://localhost:{{ $sidecar.service.port }}"
+                - sh
+                - -c
+                - ps -fe | grep "open[v]pn --cd /vpn --config /vpn/vpn_conf.ovpn"
+            periodSeconds: 2
+            failureThreshold: 1
           readinessProbe:
             exec:
               command:
-                - curl
-                - -sIfkLX
-                - GET
-                - "http://localhost:{{ $sidecar.service.port }}"
-          volumeMounts:
-            {{- range $persistence := $sidecar.persistence }}
-            - name: {{ printf "%s-%s"  $sidecar.name $persistence.name }}
-              mountPath: {{ $persistence.mountPath }}
-            {{- end }}
-            {{- range $nfs := $sidecar.nfs }}
-            - name: {{ printf "%s-%s"  $sidecar.name $nfs.name }}
-              mountPath: {{ $nfs.mountPath }}
-              {{- if $nfs.subPath }}
-              subPath: {{ $nfs.subPath }}
-              {{- end }}
-              readOnly: false
-            {{- end }}
+                - sh
+                - -c
+                - ps -fe | grep "open[v]pn --cd /vpn --config /vpn/vpn_conf.ovpn"
+            periodSeconds: 2
+            failureThreshold: 1
           resources:
-            {{- toYaml $sidecar.resources | nindent 12 }}
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: sidekick-script
+              mountPath: /usr/bin/sidekick.sh
+              subPath: sidekick.sh
+            - name: openvpn-script
+              mountPath: /usr/bin/openvpn.sh
+              subPath: openvpn.sh
+          {{- if and .Values.extraVolumes .Values.extraVolumes.volumeMounts }}
+            {{- toYaml .Values.extraVolumes.volumeMounts | nindent 12 }}
+          {{- end }}
+        {{- with .Values.sidecars }}
+          {{- toYaml . | nindent 8 }}
         {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
@@ -241,28 +179,14 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-        {{- range $sidecar := .Values.sidecars }}
-        {{- if $sidecar.configMap }}
-        - name: {{ $sidecar.configMap.name }}
+        - name: sidekick-script
           configMap:
-            name: {{ $sidecar.configMap.name }}
-            defaultMode: 0644
-        {{- end }}
-        {{- range $persistence := $sidecar.persistence }}
-        - name: {{ printf "%s-%s"  $sidecar.name $persistence.name }}
-          persistentVolumeClaim:
-            claimName: {{ printf "%s-%s"  $sidecar.name $persistence.name }}
-        {{- end }}
-        {{- range $nfs := $sidecar.nfs }}
-        - name: {{ printf "%s-%s"  $sidecar.name $nfs.name }}
-          nfs:
-            server: {{ $nfs.server }}
-            path: {{ $nfs.path }}
-          {{- if $nfs.mountOptions }}
-          mountOptions:
-            {{- range $option := $nfs.mountOptions }}
-            - {{ $option }}
-            {{- end }}
-          {{- end }}
-        {{- end }}
-        {{- end }}
+            name: shell-scripts
+            defaultMode: 0755
+        - name: openvpn-script
+          configMap:
+            name: shell-scripts
+            defaultMode: 0755
+      {{- if and .Values.extraVolumes .Values.extraVolumes.volumes }}
+        {{- toYaml .Values.extraVolumes.volumes | nindent 8 }}
+      {{- end }}

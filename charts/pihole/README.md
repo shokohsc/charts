@@ -1,6 +1,6 @@
 # pihole
 
-![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.1.2](https://img.shields.io/badge/AppVersion-v5.1.2-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.1.2](https://img.shields.io/badge/AppVersion-v5.1.2-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -21,10 +21,6 @@ A Helm chart for Kubernetes
 | admin.passwordKey | string | `"password"` | secret key |
 | adminPassword | string | `"admin"` | Administrator password when not using an existing secret (see below) |
 | affinity | object | `{}` | node/pod affinities (requires Kubernetes >=1.6) |
-| autoscaling.enabled | bool | `false` | HorizontalPodAutoscaler toggle |
-| autoscaling.maxReplicas | int | `100` | HorizontalPodAutoscaler maximum replicas |
-| autoscaling.minReplicas | int | `1` | HorizontalPodAutoscaler minimum replicas |
-| autoscaling.targetCPUUtilizationPercentage | int | `80` | HorizontalPodAutoscaler targetCPUUtilizationPercentage |
 | blacklist | object | `{}` | blacklists |
 | dhcp.enabled | bool | `false` | DHCP functionality toggle |
 | dhcp.image.repository | string | `"shokohsc/dhcp-relay"` | DHCP image repository |
@@ -48,15 +44,8 @@ A Helm chart for Kubernetes
 | image.repository | string | `"pihole/pihole"` | container image repository |
 | image.tag | string | `""` | container image tag or Chart appVersion if undefined |
 | imagePullSecrets | list | `[]` | registry secret |
-| ingress.annotations | object | `{}` | Ingress annotations |
-| ingress.enabled | bool | `false` | Ingress toggle |
-| ingress.hosts | list | `[{"host":"chart-example.local","paths":[]}]` | Ingress hosts entries |
-| ingress.tls | list | `[]` | Ingress tls entries |
 | nameOverride | string | `""` | release name override option |
 | nodeSelector | object | `{}` | node labels for pod assignment |
-| persistentVolumeClaim | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":false,"size":"500Mi"}` | Enable persistence using Persistent Volume Claims |
-| persistentVolumeClaim.annotations | object | `{}` | PersistentVolumeClaim annotations |
-| persistentVolumeClaim.enabled | bool | `false` | set to true to use pvc |
 | podAnnotations | object | `{}` | Pod annotations |
 | podSecurityContext | object | `{}` | Pod security group context |
 | probes.liveness | object | `{"enabled":true,"failureThreshold":10,"initialDelaySeconds":60,"timeoutSeconds":5}` | Configure the healthcheck for the ingress controller |
@@ -68,9 +57,6 @@ A Helm chart for Kubernetes
 | service.annotations | object | `{}` | Service annotations |
 | service.port | int | `80` | Pihole web port |
 | service.type | string | `"ClusterIP"` | Service type |
-| serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
-| serviceAccount.create | bool | `true` | Specifies whether a service account should be created |
-| serviceAccount.name | string | `""` | The name of the service account to use |
 | timezone | string | `"UTC"` | timezone i.e Europe/Paris |
 | tolerations | list | `[]` | node taints to tolerate (requires Kubernetes >=1.6) |
 | virtualHost | string | `"chart-example.local"` | Pihole virtual host |

@@ -1,6 +1,6 @@
 # openvpn-client
 
-![Version: 0.1.5](https://img.shields.io/badge/Version-0.1.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -17,24 +17,16 @@ A Helm chart for Kubernetes
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | affinity | object | `{}` | node/pod affinities (requires Kubernetes >=1.6) |
-| autoscaling.enabled | bool | `false` | HorizontalPodAutoscaler toggle |
-| autoscaling.maxReplicas | int | `100` | HorizontalPodAutoscaler maximum replicas |
-| autoscaling.minReplicas | int | `1` | HorizontalPodAutoscaler minimum replicas |
-| autoscaling.targetCPUUtilizationPercentage | int | `80` | HorizontalPodAutoscaler targetCPUUtilizationPercentage |
-| envVars | object | `{"FIREWALL":"","ROUTE":"192.168.1.0/24","TZ":"UTC"}` | Pod environment variables |
+| envVars | object | `{"FIREWALL":"''","ROUTE":"10.0.0.0/8","TZ":"UTC"}` | Pod environment variables |
+| extraPorts | list | `[]` | Pod extra ports |
+| extraVolumes | object | `{}` | Pod extra volumes |
 | fullnameOverride | string | `""` | release full release name override option |
 | image.pullPolicy | string | `"IfNotPresent"` | container image pull policy |
-| image.repository | string | `"shokohsc/openvpn-client"` | container image repository |
+| image.repository | string | `"dperson/openvpn-client"` | container image repository |
 | image.tag | string | `""` | container image tag or Chart appVersion if undefined |
 | imagePullSecrets | list | `[]` | registry secret |
-| ingress.annotations | object | `{}` | Ingress annotations |
-| ingress.enabled | bool | `false` | Ingress toggle |
-| ingress.hosts | list | `[{"host":"chart-example.local","paths":[]}]` | Ingress hosts entries |
-| ingress.tls | list | `[]` | Ingress tls entries |
 | nameOverride | string | `""` | release name override option |
-| nameservers | list | `["1.1.1.1"]` | Upstream nameservers for vpn to use |
 | nodeSelector | object | `{}` | node labels for pod assignment |
-| persistence | object | `{}` |  |
 | podAnnotations | object | `{}` | Pod annotations |
 | podSecurityContext | object | `{}` | Pod security group context |
 | replicaCount | int | `1` | pods replica count |
@@ -42,10 +34,7 @@ A Helm chart for Kubernetes
 | securityContext | object | `{"capabilities":{"add":["NET_ADMIN"]}}` | Deployment security group context |
 | service.annotations | object | `{}` | Service annotations |
 | service.type | string | `"ClusterIP"` | Service type |
-| serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
-| serviceAccount.create | bool | `true` | Specifies whether a service account should be created |
-| serviceAccount.name | string | `""` | The name of the service account to use |
-| sidecars | list | `[{"annotations":{},"configMap":{"mountPath":"/cfg","name":"transmission-settings","source":"/cfg/settings.json","target":"/config/settings.json"},"envVars":{"TZ":"UTC"},"image":{"pullPolicy":"IfNotPresent","repository":"linuxserver/transmission","tag":"latest"},"name":"transmission","persistence":[{"accessModes":["ReadWriteOnce"],"annotations":{},"mountPath":"/config","name":"config","size":"200Mi"},{"accessModes":["ReadWriteOnce"],"annotations":{},"mountPath":"/downloads","name":"download","size":"1Gi"}],"resources":{},"service":{"annotations":{},"port":9091,"type":"ClusterIP"},"startupProbe":"ps -fe | grep '/usr/bin/trans[m]ission-daemon -g /config -c /watch -f'"}]` | Pod sidecars |
+| sidecars | object | `{}` | Pod sidecars |
 | sidekick.annotations | object | `{}` | Sidekick pod annotations |
 | sidekick.envVars | object | `{}` | Sidekick pod environment variables |
 | sidekick.image.pullPolicy | string | `"Always"` | container image pull policy |

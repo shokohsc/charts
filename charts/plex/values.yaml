@@ -20,16 +20,6 @@ nameOverride: ""
 # fullnameOverride -- release full release name override option
 fullnameOverride: ""
 
-serviceAccount:
-  # serviceAccount.create -- Specifies whether a service account should be created
-  create: true
-  # serviceAccount.annotations -- Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  # serviceAccount.name -- The name of the service account to use
-  name: ""
-
 # podAnnotations -- Pod annotations
 podAnnotations: {}
 
@@ -49,28 +39,11 @@ securityContext: {}
 service:
   # service.type -- Service type
   type: ClusterIP
-  # service.port -- Pihole web port
+  # service.port -- Plex web port
   port: 32400
   # Annotations to add to the service
   # service.annotations -- Service annotations
   annotations: {}
-
-ingress:
-  # ingress.enabled -- Ingress toggle
-  enabled: false
-  # ingress.annotations -- Ingress annotations
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  # ingress.hosts -- Ingress hosts entries
-  hosts:
-    - host: chart-example.local
-      paths: []
-  # ingress.tls -- Ingress tls entries
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
 
 # resources -- pod resource requests & limits
 resources: {}
@@ -84,18 +57,6 @@ resources: {}
   # requests:
   #   cpu: 100m
   #   memory: 128Mi
-
-autoscaling:
-  # autoscaling.enabled -- HorizontalPodAutoscaler toggle
-  enabled: false
-  # autoscaling.minReplicas -- HorizontalPodAutoscaler minimum replicas
-  minReplicas: 1
-  # autoscaling.maxReplicas -- HorizontalPodAutoscaler maximum replicas
-  maxReplicas: 100
-  # autoscaling.targetCPUUtilizationPercentage -- HorizontalPodAutoscaler targetCPUUtilizationPercentage
-  targetCPUUtilizationPercentage: 80
-  # autoscaling.targetMemoryUtilizationPercentage -- HorizontalPodAutoscaler targetMemoryUtilizationPercentage
-  # targetMemoryUtilizationPercentage: 80
 
 # nodeSelector -- node labels for pod assignment
 nodeSelector: {}
@@ -119,16 +80,4 @@ envVars:
 extraPorts: []
 
 # extraVolumes -- Pod extra volumes
-extraVolumes:
-  - name: config
-    mountPath: /config
-    accessModes:
-      - ReadWriteOnce
-    size: 10Gi
-    annotations: {}
-
-# storageClass -- PersistentVolumeClaim storage class
-# storageClass: ""
-
-# nfsVolumes -- Pod nfs volumes
-nfsVolumes: []
+extraVolumes: []
