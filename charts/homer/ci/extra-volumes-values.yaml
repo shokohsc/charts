@@ -1,0 +1,8 @@
+---
+extraVolumes:
+  volumeMounts:
+    - name: assets
+      mountPath: /www/assets
+  volumes:
+    - name: assets
+      emptyDir: {}
