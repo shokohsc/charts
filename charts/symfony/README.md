@@ -21,7 +21,7 @@ A Helm chart for Kubernetes
 | extraVolumes | list | `[]` | Pod extra volumes |
 | fullnameOverride | string | `""` | release full release name override option |
 | image.pullPolicy | string | `"IfNotPresent"` | container image pull policy |
-| image.repository | string | `"symfony"` | container image repository: some symfony app |
+| image.repository | string | `""` | container image repository: some symfony app |
 | image.tag | string | `""` | container image tag or Chart appVersion if undefined |
 | imagePullSecrets | list | `[]` | registry secret |
 | initContainers | list | `[]` | Pod init containers |
@@ -29,12 +29,12 @@ A Helm chart for Kubernetes
 | nginx.envVars | object | `{}` | nginx container environment variables |
 | nginx.extraVolumes | list | `[]` | nginx container extra volumes |
 | nginx.image.repository | string | `"nginx"` | nginx image repository |
-| nginx.image.tag | string | `"1-alpine"` | nginx image tag |
+| nginx.image.tag | string | `"1.19"` | nginx image tag |
 | nodeSelector | object | `{}` | node labels for pod assignment |
 | php.envVars | object | `{}` | php container environment variables |
 | php.extraVolumes | list | `[]` | php container extra volumes |
 | php.image.repository | string | `"php"` | php image repository |
-| php.image.tag | string | `"7-fpm-alpine"` | php image tag |
+| php.image.tag | string | `"7-fpm"` | php image tag |
 | podAnnotations | object | `{}` | Pod annotations |
 | podSecurityContext | object | `{}` | Pod security group context |
 | replicaCount | int | `1` | pods replica count |

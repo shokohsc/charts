@@ -1,6 +1,6 @@
 # wekan
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v3.50](https://img.shields.io/badge/AppVersion-v3.50-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.96](https://img.shields.io/badge/AppVersion-v4.96-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -40,7 +40,7 @@ A Helm chart for Kubernetes
 | rootUrl | string | `""` | Wekan root url, defaults to https://wekan.domain.tld if empty |
 | securityContext | object | `{}` | Deployment security group context |
 | service.annotations | object | `{}` | Service annotations |
-| service.port | int | `8080` | Pihole web port |
+| service.port | int | `80` | Pihole web port |
 | service.type | string | `"ClusterIP"` | Service type |
 | tolerations | list | `[]` | node taints to tolerate (requires Kubernetes >=1.6) |
 

@@ -1,6 +1,6 @@
 # pihole
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.1.2](https://img.shields.io/badge/AppVersion-v5.1.2-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.6](https://img.shields.io/badge/AppVersion-v5.6-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -39,6 +39,7 @@ A Helm chart for Kubernetes
 | doh.service.type | string | `"ClusterIP"` | DNS over https service type |
 | doh.upstream | string | `"https://1.1.1.1/dns-query"` | DNS over https upstream server |
 | extraEnvVars | object | `{}` | extraEnvironmentVars is a list of extra enviroment variables to set for pihole to use https://github.com/pi-hole/docker-pi-hole/tree/v5.1.2#environment-variables |
+| extraVolumes | list | `[]` | Pod extra volumes |
 | fullnameOverride | string | `""` | release full release name override option |
 | image.pullPolicy | string | `"IfNotPresent"` | container image pull policy |
 | image.repository | string | `"pihole/pihole"` | container image repository |

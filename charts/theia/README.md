@@ -1,6 +1,6 @@
 # theia
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.10.0](https://img.shields.io/badge/AppVersion-1.10.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -27,18 +27,13 @@ A Helm chart for Kubernetes
 | initContainers | list | `[]` | Pod init containers |
 | nameOverride | string | `""` | release name override option |
 | nodeSelector | object | `{}` | node labels for pod assignment |
-| persistence.accessModes | list | `["ReadWriteOnce"]` | PersistentVolumeClaim access modes |
-| persistence.annotations | object | `{}` | PersistentVolumeClaim annotations |
-| persistence.enabled | bool | `false` |  |
-| persistence.mountPath | string | `"/home/project"` | PersistentVolumeClaim mounting path |
-| persistence.size | string | `"1Gi"` | PersistentVolumeClaim size request |
 | podAnnotations | object | `{}` | Pod annotations |
 | podSecurityContext | object | `{}` | Pod security group context |
 | replicaCount | int | `1` | pods replica count |
 | resources | object | `{}` | pod resource requests & limits |
 | securityContext | object | `{}` | Deployment security group context |
 | service.annotations | object | `{}` | Service annotations |
-| service.port | int | `3000` | Service port |
+| service.port | int | `80` | Service port |
 | service.type | string | `"ClusterIP"` | Service type |
 | tolerations | list | `[]` | node taints to tolerate (requires Kubernetes >=1.6) |
 

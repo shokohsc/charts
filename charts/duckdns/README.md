@@ -1,6 +1,6 @@
 # duckdns
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2020.05.07](https://img.shields.io/badge/AppVersion-2020.05.07-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -26,7 +26,7 @@ A Helm chart for Kubernetes
 | extraEnvVars.TZ | string | `"UTC"` |  |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
-| image.repository | string | `"alpine"` |  |
+| image.repository | string | `"oliverisaac/alpine-nettools"` |  |
 | image.tag | string | `""` |  |
 | imagePullSecrets | list | `[]` |  |
 | nameOverride | string | `""` |  |

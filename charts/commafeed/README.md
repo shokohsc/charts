@@ -1,6 +1,6 @@
 # commafeed
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.5.0](https://img.shields.io/badge/AppVersion-2.5.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -20,7 +20,7 @@ A Helm chart for Kubernetes
 | extraVolumes | object | `{}` | Pod extra volumes |
 | fullnameOverride | string | `""` | release full release name override option |
 | image.pullPolicy | string | `"IfNotPresent"` | container image pull policy |
-| image.repository | string | `"saggio/commafeed"` | container image repository |
+| image.repository | string | `"agross/commafeed"` | container image repository |
 | image.tag | string | `""` | container image tag or Chart appVersion if undefined |
 | imagePullSecrets | list | `[]` | registry secret |
 | initContainers | list | `[]` | Pod init containers |
@@ -32,7 +32,7 @@ A Helm chart for Kubernetes
 | resources | object | `{}` | pod resource requests & limits |
 | securityContext | object | `{}` | Deployment security group context |
 | service.annotations | object | `{}` | Service annotations |
-| service.port | int | `8082` | Service port |
+| service.port | int | `80` | Service port |
 | service.type | string | `"ClusterIP"` | Service type |
 | tolerations | list | `[]` | node taints to tolerate (requires Kubernetes >=1.6) |
 

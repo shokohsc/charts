@@ -1,6 +1,6 @@
 # commander
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 14.9.3-alpine](https://img.shields.io/badge/AppVersion-14.9.3--alpine-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 15.6.0-alpine](https://img.shields.io/badge/AppVersion-15.6.0--alpine-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -31,7 +31,7 @@ A Helm chart for Kubernetes
 | resources | object | `{}` | pod resource requests & limits |
 | securityContext | object | `{}` | Deployment security group context |
 | service.annotations | object | `{}` | Service annotations |
-| service.port | int | `8000` | Service port |
+| service.port | int | `80` | Service port |
 | service.type | string | `"ClusterIP"` | Service type |
 | tolerations | list | `[]` | node taints to tolerate (requires Kubernetes >=1.6) |
 

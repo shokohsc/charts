@@ -32,7 +32,7 @@ A Helm chart for Kubernetes
 | resources | object | `{}` | pod resource requests & limits |
 | securityContext | object | `{}` | Deployment security group context |
 | service.annotations | object | `{}` | Service annotations |
-| service.port | int | `41222` | Sftp web port |
+| service.port | int | `22` | Sftp web port |
 | service.type | string | `"ClusterIP"` | Service type |
 | tolerations | list | `[]` | node taints to tolerate (requires Kubernetes >=1.6) |
 
