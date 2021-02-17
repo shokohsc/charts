@@ -2,7 +2,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: "{{ include "openvpn-server.fullname" . }}-{{ .Values.service.protocol | lower }}"
-  labels: {{- include "openvpn-server.labels" . | nindent 4 }}
+  labels:
+    {{- include "openvpn-server.labels" . | nindent 4 }}
+    role: {{ .Values.service.protocol | lower }}
   {{- if .Values.service.annotations }}
   annotations:
     {{ toYaml .Values.service.annotations | indent 4 }}
@@ -14,8 +16,8 @@ spec:
       protocol: {{ .Values.service.protocol }}
       name: "openvpn-{{ .Values.service.protocol | lower }}"
   selector:
-    app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- include "openvpn-server.selectorLabels" . | nindent 4 }}
+    role: {{ .Values.service.protocol | lower }}
   type: {{ .Values.service.type }}
   {{- if .Values.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
@@ -29,7 +31,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: "{{ include "openvpn-server.fullname" . }}-{{ include "openvpn-server.fallbackProtocol" . }}"
-  labels: {{- include "openvpn-server.labels" . | nindent 4 }}
+  labels:
+    {{- include "openvpn-server.labels" . | nindent 4 }}
+    role: {{ include "openvpn-server.fallbackProtocol" . }}
   {{- if .Values.service.annotations }}
   annotations:
     {{ toYaml .Values.service.annotations | indent 4 }}
@@ -41,8 +45,8 @@ spec:
       protocol: {{ include "openvpn-server.fallbackProtocol" . | upper }}
       name: "openvpn-{{ include "openvpn-server.fallbackProtocol" . }}"
   selector:
-    app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- include "openvpn-server.selectorLabels" . | nindent 4 }}
+    role: {{ include "openvpn-server.fallbackProtocol" . }}
   type: {{ .Values.service.type }}
   {{- if .Values.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}

@@ -12,10 +12,12 @@ spec:
   selector:
     matchLabels:
       {{- include "openvpn-server.selectorLabels" . | nindent 6 }}
+      role: {{ .Values.service.protocol | lower }}
   template:
     metadata:
       labels:
         {{- include "openvpn-server.selectorLabels" . | nindent 8 }}
+        role: {{ .Values.service.protocol | lower }}
     spec:
       containers:
         - image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -77,10 +79,12 @@ spec:
   selector:
     matchLabels:
       {{- include "openvpn-server.selectorLabels" . | nindent 6 }}
+      role: {{ include "openvpn-server.fallbackProtocol" . }}
   template:
     metadata:
       labels:
         {{- include "openvpn-server.selectorLabels" . | nindent 8 }}
+        role: {{ include "openvpn-server.fallbackProtocol" . }}
     spec:
       containers:
         - image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
