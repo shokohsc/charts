@@ -6,9 +6,7 @@ metadata:
   labels:
     {{- include "plex.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "plex.selectorLabels" . | nindent 6 }}
@@ -25,7 +23,6 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "plex.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -58,19 +55,10 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.extraVolumes }}
           volumeMounts:
-            {{- range $volume := .Values.extraVolumes }}
-            - name: {{ $volume.name }}
-              mountPath: {{ $volume.mountPath }}
-            {{- end }}
-            {{- range $nfs := .Values.nfsVolumes }}
-            - name: {{ $nfs.name }}
-              mountPath: {{ $nfs.mountPath }}
-              {{- if $nfs.subPath }}
-              subPath: {{ $nfs.subPath }}
-              {{- end }}
-              readOnly: false
-            {{- end }}
+          {{- toYaml .volumeMounts | nindent 12 }}
+          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -83,21 +71,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.extraVolumes }}
       volumes:
-        {{- range $volume := .Values.extraVolumes }}
-        - name: {{ $volume.name }}
-          persistentVolumeClaim:
-            claimName: {{ include "plex.fullname" $ctx }}-{{ $volume.name }}
-        {{- end }}
-        {{- range $nfs := .Values.nfsVolumes }}
-        - name: {{ $nfs.name }}
-          nfs:
-            server: {{ $nfs.server }}
-            path: {{ $nfs.path }}
-          {{- if $nfs.mountOptions }}
-          mountOptions:
-            {{- range $option := $nfs.mountOptions }}
-            - {{ $option }}
-            {{- end }}
-          {{- end }}
-        {{- end }}
+      {{- toYaml .volumes | nindent 8 }}
+      {{- end }}

@@ -49,31 +49,3 @@ Selector labels
 app.kubernetes.io/name: {{ include "plex.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "plex.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "plex.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}
-
-{{/*
-Return the proper Storage Class
-*/}}
-{{- define "plex.storageClass" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .Values.storageClass }}
-    {{- if (eq "-" .Values.storageClass) }}
-        {{- printf "storageClassName: \"\"" -}}
-    {{- else }}
-        {{- printf "storageClassName: %s" .Values.storageClass -}}
-    {{- end }}
-{{- end }}
-{{- end }}

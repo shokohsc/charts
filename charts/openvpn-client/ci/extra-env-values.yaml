@@ -1,5 +1,5 @@
 ---
 envVars:
-  FIREWALL: ''
-  ROUTE: 172.16.1.0/24
+  FIREWALL: "''"
+  ROUTE: 10.0.0.0/8
   TZ: Europe/Paris

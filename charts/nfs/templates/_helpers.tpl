@@ -50,14 +50,3 @@ Selector labels
 app.kubernetes.io/name: {{ include "nfs.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "nfs.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "nfs.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}

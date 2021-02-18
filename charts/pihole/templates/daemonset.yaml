@@ -1,0 +1,68 @@
+{{- if .Values.dhcp.enabled }}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "pihole.fullname" . }}
+  labels:
+    {{- include "pihole.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "pihole.selectorLabels" . | nindent 6 }}
+      role: dhcp
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "pihole.selectorLabels" . | nindent 8 }}
+        role: dhcp
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      dnsPolicy: "ClusterFirst"
+      containers:
+        - name: {{ .Chart.Name }}-dhcp
+          securityContext:
+            capabilities:
+              add:
+                - "NET_ADMIN"
+          image: "{{ .Values.dhcp.image.repository }}:{{ .Values.dhcp.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - -d
+            - -s
+            - {{ include "pihole.fullname" . }}
+          ports:
+            - name: dhcp
+              containerPort: 67
+              protocol: UDP
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - ps -fe | grep "dh[c]p-helper -n"
+            periodSeconds: 5
+            failureThreshold: 1
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - ps -fe | grep "dh[c]p-helper -n"
+            periodSeconds: 5
+            failureThreshold: 1
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

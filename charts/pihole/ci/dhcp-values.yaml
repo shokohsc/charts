@@ -1,3 +1,8 @@
 ---
 dhcp:
   enabled: true
+
+securityContext:
+  capabilities:
+    add:
+      - "NET_ADMIN"

@@ -1,75 +1,39 @@
 ---
+extraPorts:
+  - name: peerflix
+    containerPort: 9000
+    protocol: TCP
+
+extraVolumes:
+  volumes:
+    - name: peerflix-data
+      emptyDir: {}
+
 sidecars:
   - name: peerflix
-    image:
-      repository: shokohsc/peerflix-server
-      tag: latest
-      pullPolicy: IfNotPresent
-    service:
-      type: ClusterIP
-      port: 9000
-      annotations: {}
-    annotations: {}
-    persistence:
-      - name: data
+    image: shokohsc/peerflix-server:latest
+    imagePullPolicy: IfNotPresent
+    livenessProbe:
+      exec:
+        command:
+          - curl
+          - -lsX
+          - GET
+          - "http://localhost:9000"
+    readinessProbe:
+      exec:
+        command:
+          - curl
+          - -lsX
+          - GET
+          - "http://localhost:9000"
+    startupProbe:
+      exec:
+        command:
+          - curl
+          - -lsX
+          - GET
+          - "http://localhost:9000"
+    volumeMounts:
+      - name: peerflix-data
         mountPath: /tmp/torrent-stream
-        accessModes:
-          - ReadWriteOnce
-        size: 1Gi
-        annotations: {}
-    envVars: {}
-    resources: {}
-    startupProbe: "ps -fe | grep 'no[d]e ./server/bin.js'"
-  - name: cloudtorrent
-    image:
-      repository: shokohsc/cloud-torrent
-      tag: latest
-      pullPolicy: IfNotPresent
-    service:
-      type: ClusterIP
-      port: 3000
-      annotations: {}
-    annotations: {}
-    persistence:
-      - name: data
-        mountPath: /downloads
-        accessModes:
-          - ReadWriteOnce
-        size: 1Gi
-        annotations: {}
-    envVars: {}
-    resources: {}
-    startupProbe: "ps -fe | grep 'clo[u]d-torrent'"
-  - name: deluge
-    image:
-      repository: linuxserver/deluge
-      tag: latest
-      pullPolicy: IfNotPresent
-    service:
-      type: ClusterIP
-      port: 8112
-      annotations: {}
-    annotations: {}
-    persistence:
-      - name: config
-        mountPath: /config
-        accessModes:
-          - ReadWriteOnce
-        size: 200Mi
-        annotations: {}
-      - name: data
-        mountPath: /downloads
-        accessModes:
-          - ReadWriteOnce
-        size: 1Gi
-        annotations: {}
-    configMap:
-      name: deluge-settings
-      mountPath: /cfg
-      source: /cfg/core.conf
-      target: /config/core.conf
-    envVars:
-      TZ: UTC
-      DELUGE_LOGLEVEL: error
-    resources: {}
-    startupProbe: "ps -fe | grep '/usr/bin/python3 /usr/bin/del[u]ged -c /config -d'"

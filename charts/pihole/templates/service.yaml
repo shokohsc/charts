@@ -60,6 +60,7 @@ spec:
       name: dhcp
   selector:
     {{- include "pihole.selectorLabels" . | nindent 4 }}
+    role: dhcp
 {{- end }}
 
 {{- if .Values.doh.enabled }}
@@ -87,4 +88,5 @@ spec:
       name: doh-metrics
   selector:
     {{- include "pihole.selectorLabels" . | nindent 4 }}
+    role: doh
 {{- end }}

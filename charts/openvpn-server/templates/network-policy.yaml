@@ -3,11 +3,7 @@ kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
   name: {{ include "openvpn-server.fullname" . }}
-  labels:
-    app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
-    helm.sh/chart: {{ include "openvpn-server.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "openvpn-server.labels" . | nindent 4 }}
 spec:
   podSelector: { }
   policyTypes:

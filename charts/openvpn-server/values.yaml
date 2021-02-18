@@ -56,6 +56,17 @@ affinity: {}
 # annotations -- Deployment annotations
 annotations: {}
 
+# extraVolumes -- Pod extra volumes
+extraVolumes: {}
+  # volumeMounts:
+  #   - name: some_volume
+  #     mountPath: /mnt/some_volume
+  # volumes:
+  #   - name: some_volume
+  #     nfs:
+  #       server: nfs.domain.tld
+  #       path: /
+
 # externalHostname -- Hostname OR Ip of cluster openvpn entrypoint, default to 'domain.tld' so you must define it
 externalHostname: "domain.tld"
 # externalPort -- Port cluster openvpn entrypoint, defaults to service.port (nodePort)
@@ -99,11 +110,6 @@ persistence:
   # persistence.existingClaim -- Existing PersistentVolumeClaim
   # existingClaim:
 
-  ## Data volume mount path
-  ##
-  # persistence.mountPath -- PersistentVolumeClaim mounting path
-  mountPath: /etc/openvpn
-
   ## Persistent Volume Access Mode
   ##
   # persistence.accessModes -- PersistentVolumeClaim access modes
@@ -113,7 +119,7 @@ persistence:
   ## Persistent Volume size
   ##
   # persistence.size -- PersistentVolumeClaim size request
-  size: 200Mi
+  size: 1Gi
 
   ## Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>

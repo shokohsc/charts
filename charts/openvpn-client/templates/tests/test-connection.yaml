@@ -24,6 +24,8 @@ spec:
       args: ['-LIX', 'GET', '{{ include "openvpn-client.fullname" . }}-sidekick:{{ .Values.sidekick.service.port }}/api']
   restartPolicy: Never
 
+
+{{- $ctx := . }}
 ---
 apiVersion: v1
 kind: Pod
@@ -40,13 +42,13 @@ spec:
       image: busybox
       command: ['cat']
       args: ['/etc/resolv.conf']
-    {{- range $sidecar := .Values.sidecars }}
-    - name: {{ printf "%s-%s" "nc" $sidecar.name }}
+    {{- range $port := .Values.extraPorts }}
+    - name: {{ printf "%s-%s" "nc" $port.name }}
       image: busybox
       command: ['nc']
-      args: ['-v', '-z', '{{ include "openvpn-client.fullname" $ctx }}', '{{ $sidecar.service.port }}']
-    - name: {{ printf "%s-%s" "curl" $sidecar.name }}
+      args: ['-v', '-z', '{{ include "openvpn-client.fullname" $ctx }}-{{ $port.name }}', '{{ $port.containerPort }}']
+    - name: {{ printf "%s-%s" "curl" $port.name }}
       image: curlimages/curl
-      args: ['-LIX', 'GET', '{{ include "openvpn-client.fullname" $ctx }}:{{ $sidecar.service.port }}']
+      args: ['-LIX', 'GET', '{{ include "openvpn-client.fullname" $ctx }}-{{ $port.name }}:{{ $port.containerPort }}']
     {{- end }}
   restartPolicy: Never

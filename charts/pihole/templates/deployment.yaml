@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "pihole.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "pihole.selectorLabels" . | nindent 6 }}
@@ -24,7 +22,6 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "pihole.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       dnsPolicy: "None"
@@ -32,15 +29,6 @@ spec:
         nameservers:
           - 127.0.0.1
           - 1.1.1.1
-      {{- if .Values.doh.enabled }}
-      hostAliases:
-        - ip: "8.8.4.4"
-          hostnames:
-          - "dns.google"
-        - ip: "9.9.9.9"
-          hostnames:
-          - "dns.quad9.net"
-      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -79,6 +67,11 @@ spec:
             - containerPort: 53
               name: dns
               protocol: UDP
+            {{- if .Values.dhcp.enabled }}
+            - containerPort: 67
+              name: dhcp
+              protocol: UDP
+            {{- end }}
           livenessProbe:
             httpGet:
               path: /admin.index.php
@@ -94,11 +87,9 @@ spec:
             failureThreshold: {{ .Values.probes.readiness.failureThreshold }}
             timeoutSeconds: {{ .Values.probes.readiness.timeoutSeconds }}
           volumeMounts:
-            - mountPath: /etc/pihole
-              name: config
-              {{- if .Values.persistentVolumeClaim.subPath }}
-              subPath: {{ .Values.persistentVolumeClaim.subPath }}
-              {{- end }}
+            {{- with .Values.extraVolumes }}
+            {{- toYaml .volumeMounts | nindent 12 }}
+            {{- end }}
             - mountPath: /etc/dnsmasq.d/02-custom.conf
               name: custom-dnsmasq
               subPath: 02-custom.conf
@@ -127,44 +118,89 @@ spec:
             {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-        {{- if .Values.dhcp.enabled }}
-        - name: {{ .Chart.Name }}-dhcp
-          securityContext:
-            capabilities:
-              add:
-                - "NET_ADMIN"
-          image: "{{ .Values.dhcp.image.repository }}:{{ .Values.dhcp.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args:
-            - -d
-            - -s
-            - 127.0.0.1
-          ports:
-            - name: dhcp
-              containerPort: 67
-              protocol: UDP
-          livenessProbe:
-            exec:
-              command:
-                - nc
-                - -z
-                - -v
-                - -u
-                - 127.0.0.1
-                - '67'
-          readinessProbe:
-            exec:
-              command:
-                - nc
-                - -z
-                - -v
-                - -u
-                - 127.0.0.1
-                - '67'
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        {{- with .Values.extraVolumes }}
+        {{- toYaml .volumes | nindent 8 }}
         {{- end }}
-        {{- if .Values.doh.enabled }}
+        - configMap:
+            defaultMode: 420
+            name: {{ template "pihole.fullname" . }}-custom-dnsmasq
+          name: custom-dnsmasq
+        {{- if .Values.adlists }}
+        - configMap:
+            defaultMode: 420
+            name: {{ template "pihole.fullname" . }}-adlists
+          name: adlists
+        {{- end }}
+        {{- if .Values.whitelist }}
+        - configMap:
+            defaultMode: 420
+            name: {{ template "pihole.fullname" . }}-whitelist
+          name: whitelist
+        {{- end }}
+        {{- if .Values.blacklist }}
+        - configMap:
+            defaultMode: 420
+            name: {{ template "pihole.fullname" . }}-blacklist
+          name: blacklist
+        {{- end }}
+        {{- if .Values.regex }}
+        - configMap:
+            defaultMode: 420
+            name: {{ template "pihole.fullname" . }}-regex
+          name: regex
+        {{- end }}
+
+---
+{{- if .Values.doh.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pihole.fullname" . }}-doh
+  labels:
+    {{- include "pihole.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "pihole.selectorLabels" . | nindent 6 }}
+      role: doh
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "pihole.selectorLabels" . | nindent 8 }}
+        role: doh
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      hostAliases:
+        - ip: "8.8.4.4"
+          hostnames:
+          - "dns.google"
+        - ip: "9.9.9.9"
+          hostnames:
+          - "dns.quad9.net"
+      containers:
         - name: {{ .Chart.Name }}-doh
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
@@ -210,7 +246,6 @@ spec:
                 - '5053'
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -223,39 +258,4 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      volumes:
-      - name: config
-        {{- if .Values.persistentVolumeClaim.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ if .Values.persistentVolumeClaim.existingClaim }}{{ .Values.persistentVolumeClaim.existingClaim }}{{- else }}{{ template "pihole.fullname" . }}{{- end }}
-        {{- else }}
-        emptyDir: {}
-        {{- end }}
-      - configMap:
-          defaultMode: 420
-          name: {{ template "pihole.fullname" . }}-custom-dnsmasq
-        name: custom-dnsmasq
-      {{- if .Values.adlists }}
-      - configMap:
-          defaultMode: 420
-          name: {{ template "pihole.fullname" . }}-adlists
-        name: adlists
-      {{- end }}
-      {{- if .Values.whitelist }}
-      - configMap:
-          defaultMode: 420
-          name: {{ template "pihole.fullname" . }}-whitelist
-        name: whitelist
-      {{- end }}
-      {{- if .Values.blacklist }}
-      - configMap:
-          defaultMode: 420
-          name: {{ template "pihole.fullname" . }}-blacklist
-        name: blacklist
-      {{- end }}
-      {{- if .Values.regex }}
-      - configMap:
-          defaultMode: 420
-          name: {{ template "pihole.fullname" . }}-regex
-        name: regex
-      {{- end }}
+{{- end }}

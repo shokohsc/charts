@@ -1,12 +1,9 @@
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: "{{ include "openvpn-server.fullname" . }}-ovpn-genconfig"
-  labels:
-    app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
-    helm.sh/chart: {{ include "openvpn-server.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "openvpn-server.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "-10"
@@ -56,12 +53,15 @@ spec:
           - {{ . | squote }}
           {{- end }}
         volumeMounts:
-          - name: data
-            mountPath: {{ .Values.persistence.mountPath }}
+          - name: {{ include "openvpn-server.fullname" . }}
+            mountPath: /etc/openvpn
       volumes:
-        - name: data
+        - name: {{ include "openvpn-server.fullname" . }}
           persistentVolumeClaim:
-            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.name" . }}{{- end }}
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.fullname" . }}{{- end }}
+      {{- with .Values.extraVolumes.volumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
 
 ---
 
@@ -69,11 +69,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: "{{ include "openvpn-server.fullname" . }}-ovpn-initpki"
-  labels:
-    app.kubernetes.io/name: {{ include "openvpn-server.name" . }}
-    helm.sh/chart: {{ include "openvpn-server.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "openvpn-server.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "-5"
@@ -131,9 +127,12 @@ spec:
           - name: EASYRSA_CA_EXPIRE
             value: {{ .Values.easyrsa.caExpire | quote }}
         volumeMounts:
-          - name: data
-            mountPath: {{ .Values.persistence.mountPath }}
+          - name: {{ include "openvpn-server.fullname" . }}
+            mountPath: /etc/openvpn
       volumes:
-        - name: data
+        - name: {{ include "openvpn-server.fullname" . }}
           persistentVolumeClaim:
-            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.name" . }}{{- end }}
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.fullname" . }}{{- end }}
+      {{- with .Values.extraVolumes.volumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

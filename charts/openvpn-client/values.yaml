@@ -7,7 +7,7 @@ replicaCount: 1
 
 image:
   # image.repository -- container image repository
-  repository: shokohsc/openvpn-client
+  repository: dperson/openvpn-client
   # image.pullPolicy -- container image pull policy
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
@@ -20,18 +20,6 @@ imagePullSecrets: []
 nameOverride: ""
 # fullnameOverride -- release full release name override option
 fullnameOverride: ""
-
-serviceAccount:
-  # Specifies whether a service account should be created
-  # serviceAccount.create -- Specifies whether a service account should be created
-  create: true
-  # Annotations to add to the service account
-  # serviceAccount.annotations -- Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  # serviceAccount.name -- The name of the service account to use
-  name: ""
 
 # podAnnotations -- Pod annotations
 podAnnotations: {}
@@ -56,23 +44,6 @@ service:
   # service.annotations -- Service annotations
   annotations: {}
 
-ingress:
-  # ingress.enabled -- Ingress toggle
-  enabled: false
-  # ingress.annotations -- Ingress annotations
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  # ingress.hosts -- Ingress hosts entries
-  hosts:
-    - host: chart-example.local
-      paths: []
-  # ingress.tls -- Ingress tls entries
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
 # resources -- pod resource requests & limits
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -86,18 +57,6 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-autoscaling:
-  # autoscaling.enabled -- HorizontalPodAutoscaler toggle
-  enabled: false
-  # autoscaling.minReplicas -- HorizontalPodAutoscaler minimum replicas
-  minReplicas: 1
-  # autoscaling.maxReplicas -- HorizontalPodAutoscaler maximum replicas
-  maxReplicas: 100
-  # autoscaling.targetCPUUtilizationPercentage -- HorizontalPodAutoscaler targetCPUUtilizationPercentage
-  targetCPUUtilizationPercentage: 80
-  # autoscaling.targetMemoryUtilizationPercentage -- HorizontalPodAutoscaler targetMemoryUtilizationPercentage
-  # targetMemoryUtilizationPercentage: 80
-
 # nodeSelector -- node labels for pod assignment
 nodeSelector: {}
 
@@ -107,20 +66,26 @@ tolerations: []
 # affinity -- node/pod affinities (requires Kubernetes >=1.6)
 affinity: {}
 
-persistence: {}
-  # persistence.storageClass -- PersistentVolumeClaim storage class
-  # storageClass: ""
-
 # https://github.com/dperson/openvpn-client
 # envVars -- Pod environment variables
 envVars:
-  FIREWALL: ''
-  ROUTE: 192.168.1.0/24
+  FIREWALL: "''"
+  ROUTE: 10.0.0.0/8
   TZ: UTC
 
-# nameservers -- Upstream nameservers for vpn to use
-nameservers:
-  - 1.1.1.1
+# extraVolumes -- Pod extra volumes
+extraVolumes: {}
+  # volumeMounts:
+  #   - name: some_volume
+  #     mountPath: /mnt/some_volume
+  # volumes:
+  #   - name: some_volume
+  #     nfs:
+  #       server: nfs.domain.tld
+  #       path: /
+
+# extraPorts -- Pod extra ports
+extraPorts: []
 
 sidekick:
   image:
@@ -150,48 +115,4 @@ sidekick:
     # OPENVPN_PROFILE_PROTOCOL: "*" # '*', 'udp', 'tcp' are valid choices
 
 # sidecars -- Pod sidecars
-sidecars:
-  - name: transmission
-    image:
-      repository: linuxserver/transmission
-      tag: latest
-      pullPolicy: IfNotPresent
-    service:
-      type: ClusterIP
-      port: 9091
-      annotations: {}
-    annotations: {}
-    persistence:
-      - name: config
-        mountPath: /config
-        accessModes:
-          - ReadWriteOnce
-        size: 200Mi
-        annotations: {}
-      - name: download
-        mountPath: /downloads
-        accessModes:
-          - ReadWriteOnce
-        size: 1Gi
-        annotations: {}
-      # - name: download-incomplete
-      #   mountPath: /downloads/incomplete
-      #   accessModes:
-      #     - ReadWriteOnce
-      #   size: 1Gi
-      #   annotations: {}
-    # nfs:
-    #   - name: download-complete
-    #     server: nfs-shared-0.nfs-shared.nfs-shared.svc.cluster.local
-    #     path: /
-    #     mountPath: /downloads/complete
-    #     subPath: transmission
-    configMap:
-      name: transmission-settings
-      mountPath: /cfg
-      source: /cfg/settings.json
-      target: /config/settings.json
-    envVars:
-      TZ: UTC
-    resources: {}
-    startupProbe: "ps -fe | grep '/usr/bin/trans[m]ission-daemon -g /config -c /watch -f'"
+sidecars: {}
