@@ -56,6 +56,9 @@ affinity: {}
 # annotations -- Deployment annotations
 annotations: {}
 
+# podAnnotations -- Deployment pod annotations
+podAnnotations: {}
+
 # extraVolumes -- Pod extra volumes
 extraVolumes: {}
   # volumeMounts:
@@ -68,7 +71,7 @@ extraVolumes: {}
   #       path: /
 
 # externalHostname -- Hostname OR Ip of cluster openvpn entrypoint, default to 'domain.tld' so you must define it
-externalHostname: "domain.tld"
+externalHostname: ""
 # externalPort -- Port cluster openvpn entrypoint, defaults to service.port (nodePort)
 externalPort: ""
 # cipher -- Cipher used
@@ -77,7 +80,9 @@ cipher: AES-256-CBC
 digestAlgorythm: SHA384
 # dnsServer -- DNS Server IP
 dnsServer: 1.1.1.1
-# extraOptions -- Additional options for openvpn configuration
+# options -- Additional options for openvpn configuration
+options: []
+# extraOptions -- Additional options for openvpn configuration: -e 'option'
 extraOptions: []
 
 easyrsa:

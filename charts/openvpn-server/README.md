@@ -1,6 +1,6 @@
 # openvpn-server
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.4](https://img.shields.io/badge/AppVersion-2.4-informational?style=flat-square)
+![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.4](https://img.shields.io/badge/AppVersion-2.4-informational?style=flat-square)
 
 Roll your own OpenVPN server
 
@@ -28,9 +28,9 @@ Roll your own OpenVPN server
 | easyrsa.secret.enabled | bool | `false` | Enabling passphrase on CA (recommended, defaults to false) |
 | easyrsa.secret.existingSecret | string | `""` | Existing Secret with existing key: openvpn-server-passphrase |
 | easyrsa.secret.passphrase | string | `""` | Secret passphrase i.e pass:1234 |
-| externalHostname | string | `"domain.tld"` | Hostname OR Ip of cluster openvpn entrypoint, default to 'domain.tld' so you must define it |
+| externalHostname | string | `""` | Hostname OR Ip of cluster openvpn entrypoint, default to 'domain.tld' so you must define it |
 | externalPort | string | `""` | Port cluster openvpn entrypoint, defaults to service.port (nodePort) |
-| extraOptions | list | `[]` | Additional options for openvpn configuration |
+| extraOptions | list | `[]` | Additional options for openvpn configuration: -e 'option' |
 | extraVolumes | object | `{}` | Pod extra volumes |
 | fullnameOverride | string | `""` | release full release name override option |
 | image.pullPolicy | string | `"IfNotPresent"` | container image pull policy |
@@ -41,9 +41,11 @@ Roll your own OpenVPN server
 | limitedCidr | string | `"10.0.0.0/8"` | CIDR to be blocked out |
 | nameOverride | string | `""` | release name override option |
 | nodeSelector | object | `{}` | node labels for pod assignment |
+| options | list | `[]` | Additional options for openvpn configuration |
 | persistence.accessModes | list | `["ReadWriteOnce"]` | PersistentVolumeClaim access modes |
 | persistence.annotations | object | `{}` | PersistentVolumeClaim annotations |
 | persistence.size | string | `"1Gi"` | PersistentVolumeClaim size request |
+| podAnnotations | object | `{}` | Deployment pod annotations |
 | replicaCount | int | `1` | pods replica count |
 | resources | object | `{}` | pod resource requests & limits |
 | service.annotations | object | `{}` | Service annotations |

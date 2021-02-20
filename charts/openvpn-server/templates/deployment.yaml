@@ -4,6 +4,7 @@ metadata:
   name: {{ include "openvpn-server.fullname" . }}-{{ .Values.service.protocol | lower }}
   labels: {{- include "openvpn-server.labels" . | nindent 4 }}
   annotations:
+    helm.sh/hook-weight: "15"
     {{- with .Values.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -18,6 +19,10 @@ spec:
       labels:
         {{- include "openvpn-server.selectorLabels" . | nindent 8 }}
         role: {{ .Values.service.protocol | lower }}
+      annotations:
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       containers:
         - image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -71,6 +76,7 @@ metadata:
   name: {{ include "openvpn-server.fullname" . }}-{{ include "openvpn-server.fallbackProtocol" . }}
   labels: {{- include "openvpn-server.labels" . | nindent 4 }}
   annotations:
+    helm.sh/hook-weight: "20"
     {{- with .Values.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
