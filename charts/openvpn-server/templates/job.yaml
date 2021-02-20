@@ -5,9 +5,9 @@ metadata:
   name: "{{ include "openvpn-server.fullname" . }}-ovpn-genconfig"
   labels: {{- include "openvpn-server.labels" . | nindent 4 }}
   annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "-10"
-    "helm.sh/hook-delete-policy": hook-succeeded
+    helm.sh/hook: pre-install
+    helm.sh/hook-weight: "5"
+    helm.sh/hook-delete-policy: hook-succeeded
     {{- with .Values.jobs.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -29,7 +29,7 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         env:
           - name: SERVER_PUBLIC_URL
-            value: "{{ .Values.service.protocol | lower }}://{{ .Values.externalHostname }}:{{ .Values.externalPort | default .Values.service.port }}"
+            value: "{{ .Values.service.protocol | lower }}://{{ .Values.externalHostname | default "domain.tld" }}:{{ .Values.externalPort | default .Values.service.port }}"
           - name: CIPHER
             value: "{{ .Values.cipher }}"
           - name: DIGEST_ALGORYTHM
@@ -48,6 +48,9 @@ spec:
           - "-b"
           - "-n"
           - "$(DNS_SERVER)"
+          {{- range .Values.options }}
+          - {{ . | squote }}
+          {{- end }}
           {{- range .Values.extraOptions }}
           - -e
           - {{ . | squote }}
@@ -71,9 +74,9 @@ metadata:
   name: "{{ include "openvpn-server.fullname" . }}-ovpn-initpki"
   labels: {{- include "openvpn-server.labels" . | nindent 4 }}
   annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "-5"
-    "helm.sh/hook-delete-policy": hook-succeeded
+    helm.sh/hook: pre-install
+    helm.sh/hook-weight: "10"
+    helm.sh/hook-delete-policy: hook-succeeded
     {{- with .Values.jobs.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -103,7 +106,7 @@ spec:
           - name: EASYRSA_BATCH
             value: "yes"
           - name: EASYRSA_REQ_CN
-            value: {{ .Values.externalHostname }}
+            value: {{ .Values.externalHostname | default "domain.tld" }}
           {{- if .Values.easyrsa.secret.enabled }}
           - name: EASYRSA_PASSIN
             valueFrom:

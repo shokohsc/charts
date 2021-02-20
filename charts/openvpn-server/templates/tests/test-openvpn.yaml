@@ -6,8 +6,8 @@ metadata:
   labels:
     {{- include "openvpn-server.labels" . | nindent 4 }}
   annotations:
-    "helm.sh/hook": "post-install,test"
-    "helm.sh/hook-weight": "30"
+    helm.sh/hook: "test"
+    helm.sh/hook-weight: "10"
 spec:
   containers:
     - name: generate-client
@@ -59,8 +59,8 @@ metadata:
   labels:
     {{- include "openvpn-server.labels" . | nindent 4 }}
   annotations:
-    "helm.sh/hook": "post-install,test"
-    "helm.sh/hook-weight": "35"
+    helm.sh/hook: "test"
+    helm.sh/hook-weight: "15"
 spec:
   containers:
     - name: get-client
@@ -85,8 +85,8 @@ metadata:
   labels:
     {{- include "openvpn-server.labels" . | nindent 4 }}
   annotations:
-    "helm.sh/hook": "post-install,test"
-    "helm.sh/hook-weight": "40"
+    helm.sh/hook: "test"
+    helm.sh/hook-weight: "20"
 spec:
   containers:
     - name: list-client
@@ -109,8 +109,8 @@ metadata:
   labels:
     {{- include "openvpn-server.labels" . | nindent 4 }}
   annotations:
-    "helm.sh/hook": "post-install,test"
-    "helm.sh/hook-weight": "45"
+    helm.sh/hook: "test"
+    helm.sh/hook-weight: "25"
 spec:
   containers:
     - name: delete-client
