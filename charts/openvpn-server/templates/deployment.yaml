@@ -4,7 +4,6 @@ metadata:
   name: {{ include "openvpn-server.fullname" . }}-{{ .Values.service.protocol | lower }}
   labels: {{- include "openvpn-server.labels" . | nindent 4 }}
   annotations:
-    helm.sh/hook-weight: "15"
     {{- with .Values.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -24,6 +23,78 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
+      initContainers:
+        - image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          name: 00-ovpn-genconfig
+          env:
+            - name: SERVER_PUBLIC_URL
+              value: "{{ .Values.service.protocol | lower }}://{{ .Values.externalHostname | default "domain.tld" }}:{{ .Values.externalPort | default .Values.service.port }}"
+            - name: CIPHER
+              value: "{{ .Values.cipher }}"
+            - name: DIGEST_ALGORYTHM
+              value: "{{ .Values.digestAlgorythm }}"
+            - name: DNS_SERVER
+              value: "{{ .Values.dnsServer }}"
+          command:
+            - /usr/local/bin/ovpn_genconfig
+          args:
+            - "-u"
+            - "$(SERVER_PUBLIC_URL)"
+            - "-C"
+            - "$(CIPHER)"
+            - "-a"
+            - "$(DIGEST_ALGORYTHM)"
+            - "-b"
+            - "-n"
+            - "$(DNS_SERVER)"
+            {{- range .Values.options }}
+            - {{ . | squote }}
+            {{- end }}
+            {{- range .Values.extraOptions }}
+            - -e
+            - {{ . | squote }}
+            {{- end }}
+          volumeMounts:
+            - name: {{ include "openvpn-server.fullname" . }}
+              mountPath: /etc/openvpn
+        - name: 01-ovpn-initpki
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          command:
+            - /usr/local/bin/ovpn-initpki.sh
+          env:
+            - name: EASYRSA_BATCH
+              value: "yes"
+            - name: EASYRSA_REQ_CN
+              value: {{ .Values.externalHostname | default "domain.tld" }}
+            {{- if .Values.easyrsa.secret.enabled }}
+            - name: EASYRSA_PASSIN
+              valueFrom:
+                secretKeyRef:
+                  {{- if .Values.easyrsa.secret.existingSecret }}
+                  name: {{ .Values.easyrsa.secret.existingSecret }}
+                  {{- else }}
+                  name: {{ template "openvpn-server.secretName" . }}
+                  {{- end }}
+                  key: openvpn-server-passphrase
+            - name: EASYRSA_PASSOUT
+              valueFrom:
+                secretKeyRef:
+                  {{- if .Values.easyrsa.secret.existingSecret }}
+                  name: {{ .Values.easyrsa.secret.existingSecret }}
+                  {{- else }}
+                  name: {{ template "openvpn-server.secretName" . }}
+                  {{- end }}
+                  key: openvpn-server-passphrase
+            {{- end }}
+            - name: EASYRSA_CA_EXPIRE
+              value: {{ .Values.easyrsa.caExpire | quote }}
+          volumeMounts:
+            - name: {{ include "openvpn-server.fullname" . }}
+              mountPath: /etc/openvpn
+            - name: {{ include "openvpn-server.fullname" . }}-scripts
+              mountPath: /usr/local/bin/ovpn-initpki.sh
+              subPath: ovpn-initpki.sh
       containers:
         - image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -65,6 +136,10 @@ spec:
         - name: {{ include "openvpn-server.fullname" . }}
           persistentVolumeClaim:
             claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "openvpn-server.fullname" . }}{{- end }}
+        - name: {{ include "openvpn-server.fullname" . }}-scripts
+          configMap:
+            name: {{ include "openvpn-server.fullname" . }}-scripts
+            defaultMode: 0755
       {{- with .Values.extraVolumes.volumes }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -76,7 +151,7 @@ metadata:
   name: {{ include "openvpn-server.fullname" . }}-{{ include "openvpn-server.fallbackProtocol" . }}
   labels: {{- include "openvpn-server.labels" . | nindent 4 }}
   annotations:
-    helm.sh/hook-weight: "20"
+    helm.sh/hook: post-install
     {{- with .Values.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}

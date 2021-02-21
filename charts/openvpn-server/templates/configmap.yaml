@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "openvpn-server.fullname" . }}-scripts
+  labels: {{- include "openvpn-server.labels" . | nindent 4 }}
+data:
+  ovpn-initpki.sh: |
+    #!/bin/sh
+    if [[ ! -d "/etc/openvpn/pki" ]]; then
+      {{- if not .Values.easyrsa.secret.enabled }}
+      /usr/local/bin/ovpn_initpki nopass;
+      {{- else }}
+      /usr/local/bin/ovpn_initpki;
+      {{- end }}
+    fi
+    exit 0;
