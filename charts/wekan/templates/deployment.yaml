@@ -31,10 +31,17 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            - name: ROOT_URL
-              value: {{ default "https://wekan.domain.tld" .Values.rootUrl | quote }}
             - name: MONGO_URL
-              value: {{ .Values.mongoUrl | default (printf "mongodb://%s-%s/wekan" (include "wekan.fullname" .) "mongodb") | quote }}
+            {{- if .Values.mongoUrl.secret }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mongoUrl.secret.name }}
+                  key: {{ .Values.mongoUrl.secret.key }}
+            {{- else if .Values.mongoUrl.envVar }}
+              value: {{ .Values.mongoUrl.envVar }}
+            {{- else }}
+              value: {{ (printf "mongodb://%s-%s/wekan" (include "wekan.fullname" .) "mongodb") }}
+            {{- end }}
             {{- range $key, $value := .Values.envVars }}
             - name: {{ $key | quote }}
               value: {{ $value | quote }}
