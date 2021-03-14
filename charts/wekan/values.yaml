@@ -71,12 +71,15 @@ tolerations: []
 affinity: {}
 
 # envVars -- Pod environment variables
-envVars: {}
+envVars:
+  ROOT_URL: https://wekan.domain.tld
+  # MONGO_URL: mongodb://RELEASE-NAME-mongodb/wekan
 
-# rootUrl -- Wekan root url, defaults to https://wekan.domain.tld if empty
-rootUrl: ""
-# mongoUrl -- MongoDB server url, defaults to mongodb://RELEASE-NAME-wekan-mongodb/wekan if empty
-mongoUrl: ""
+mongoUrl: {}
+  # envVar: mongodb://RELEASE-NAME-mongodb/wekan
+  # secret:
+  #   name: wekan
+  #   key: mongo-url
 
 mongodb:
   # mongodb.enabled -- chart dependency
