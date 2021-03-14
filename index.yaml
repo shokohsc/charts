@@ -3,6 +3,22 @@ entries:
   commafeed:
   - apiVersion: v2
     appVersion: 2.5.0
+    created: "2021-03-14T22:55:23.224271108Z"
+    description: A Helm chart for Kubernetes
+    digest: 433b3552c30b99ced86f568b8ca0700d9a78dced4bfbe98a8e65cf8f215ba0ed
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: commafeed
+    sources:
+    - https://github.com/shokohsc/charts
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/commafeed-0.2.1/commafeed-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: 2.5.0
     created: "2021-02-18T18:37:29.738238233Z"
     description: A Helm chart for Kubernetes
     digest: e16e346891c47859d6b4198cd58c49f9d34fbeb6527d891106c2c51cc52b6ee6
@@ -30,6 +46,22 @@ entries:
     - https://github.com/shokohsc/charts/releases/download/commafeed-0.1.0/commafeed-0.1.0.tgz
     version: 0.1.0
   commander:
+  - apiVersion: v2
+    appVersion: 15.6.0-alpine
+    created: "2021-03-14T22:55:23.311970855Z"
+    description: A Helm chart for Kubernetes
+    digest: 0b34d5221a477ce35f65f1811e187a3f24e855d177ab3c39eab844baa6918991
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: commander
+    sources:
+    - https://github.com/shokohsc/charts
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/commander-0.2.1/commander-0.2.1.tgz
+    version: 0.2.1
   - apiVersion: v2
     appVersion: 15.6.0-alpine
     created: "2021-02-18T18:37:29.819955723Z"
@@ -103,6 +135,22 @@ entries:
   duckdns:
   - apiVersion: v2
     appVersion: 2020.05.07
+    created: "2021-03-14T22:55:23.407185414Z"
+    description: A Helm chart for Kubernetes
+    digest: 4bfcaaac8a0482c705f4632fc3dbb27c7a2da1fb7b083ac3b1e1384beb0aa630
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: duckdns
+    sources:
+    - https://github.com/shokohsc/charts
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/duckdns-0.2.1/duckdns-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: 2020.05.07
     created: "2021-02-18T18:37:29.916437984Z"
     description: A Helm chart for Kubernetes
     digest: 849c8d3f6491332edbfd1a225baa0ff46a675dff2f5ba1d804798392ed96c838
@@ -130,6 +178,22 @@ entries:
     - https://github.com/shokohsc/charts/releases/download/duckdns-0.1.0/duckdns-0.1.0.tgz
     version: 0.1.0
   heimdall:
+  - apiVersion: v2
+    appVersion: 2.2.2-ls117
+    created: "2021-03-14T22:55:23.500005773Z"
+    description: A Helm chart for Kubernetes
+    digest: fd98e19a50777b1fa9b5507c1c5a05f39989e4314b2d0252e5a543ef66d4b915
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: heimdall
+    sources:
+    - https://github.com/shokohsc/charts
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/heimdall-0.2.1/heimdall-0.2.1.tgz
+    version: 0.2.1
   - apiVersion: v2
     appVersion: 2.2.2-ls117
     created: "2021-02-18T18:37:30.001140488Z"
@@ -161,6 +225,22 @@ entries:
   homer:
   - apiVersion: v2
     appVersion: 20.12.19
+    created: "2021-03-14T22:55:23.607554345Z"
+    description: A Helm chart for Kubernetes
+    digest: 363b4583641a5708bff53f911887ef7090dcafeb96bc7a6f0c5b618f914bef76
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: homer
+    sources:
+    - https://github.com/shokohsc/charts
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/homer-0.1.1/homer-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 20.12.19
     created: "2021-02-18T18:37:30.093852031Z"
     description: A Helm chart for Kubernetes
     digest: e6f37626f6350fe30dfe522034b31976c3196a735d077d29c4dbe6a77d697647
@@ -174,6 +254,22 @@ entries:
     - https://github.com/shokohsc/charts/releases/download/homer-0.1.0/homer-0.1.0.tgz
     version: 0.1.0
   nfs:
+  - apiVersion: v2
+    appVersion: v0.0.2
+    created: "2021-03-14T22:55:23.694673367Z"
+    description: A Helm chart for Kubernetes
+    digest: ae7b2fd852258e6b91e881e82506ed4be6c53995de1655e35c1551785690282d
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: nfs
+    sources:
+    - https://github.com/shokohsc/charts
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/nfs-0.3.1/nfs-0.3.1.tgz
+    version: 0.3.1
   - apiVersion: v2
     appVersion: v0.0.2
     created: "2021-02-18T18:37:30.190277791Z"
@@ -231,6 +327,22 @@ entries:
     - https://github.com/shokohsc/charts/releases/download/nfs-0.0.1/nfs-0.0.1.tgz
     version: 0.0.1
   openvpn-client:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2021-03-14T22:55:23.799059108Z"
+    description: A Helm chart for Kubernetes
+    digest: 5f431e8ebe79b23146ed1aec82f128b3f35b798f8b6601280cac46ddcc850859
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: openvpn-client
+    sources:
+    - https://github.com/shokohsc/charts
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/openvpn-client-0.2.1/openvpn-client-0.2.1.tgz
+    version: 0.2.1
   - apiVersion: v2
     appVersion: latest
     created: "2021-02-18T18:37:30.308348655Z"
@@ -330,6 +442,22 @@ entries:
     - https://github.com/shokohsc/charts/releases/download/openvpn-client-0.1.0/openvpn-client-0.1.0.tgz
     version: 0.1.0
   openvpn-server:
+  - apiVersion: v2
+    appVersion: "2.4"
+    created: "2021-03-14T22:55:23.918932892Z"
+    description: Roll your own OpenVPN server
+    digest: e921379b71f58150d7863d71e262bce66361e27abb9634f11c92ddfcfc28f719
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: openvpn-server
+    sources:
+    - https://github.com/shokohsc/charts
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/openvpn-server-0.3.2/openvpn-server-0.3.2.tgz
+    version: 0.3.2
   - apiVersion: v2
     appVersion: "2.4"
     created: "2021-02-22T18:47:09.702854623Z"
@@ -515,6 +643,22 @@ entries:
   pihole:
   - apiVersion: v2
     appVersion: v5.6
+    created: "2021-03-14T22:55:24.018272922Z"
+    description: A Helm chart for Kubernetes
+    digest: 539ad1eb1a3ed4c58ce55baf25fe79ac09b931e78e898352b7fde608d06cf4fa
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: pihole
+    sources:
+    - https://github.com/shokohsc/charts
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/pihole-0.2.1/pihole-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: v5.6
     created: "2021-02-18T18:37:30.495487649Z"
     description: A Helm chart for Kubernetes
     digest: d50638ee01a37343a627bb726c4793bf5751b7c10a5e736e988d3ba8089139db
@@ -586,6 +730,22 @@ entries:
   plex:
   - apiVersion: v2
     appVersion: 1.21.3.4021-5a0a3e4b2
+    created: "2021-03-14T22:55:24.127866679Z"
+    description: A Helm chart for Kubernetes
+    digest: d6708925f66f70d8f6f5c557f1c36f4d931fb39cfd6f1b027b75010230eb9184
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: plex
+    sources:
+    - https://github.com/shokohsc/charts
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/plex-0.2.1/plex-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: 1.21.3.4021-5a0a3e4b2
     created: "2021-02-18T18:37:30.633551908Z"
     description: A Helm chart for Kubernetes
     digest: b85188755c30411c919d87c5f5963b904b97be92095853339dcefdef2f7fe4d2
@@ -613,6 +773,22 @@ entries:
     - https://github.com/shokohsc/charts/releases/download/plex-0.1.0/plex-0.1.0.tgz
     version: 0.1.0
   samba:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2021-03-14T22:55:24.233440869Z"
+    description: A Helm chart for Kubernetes
+    digest: c600a1bb64e8e0f562ba2c458aefc9a1831aeb3dd22cc0c885af4e38c7a4c764
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: samba
+    sources:
+    - https://github.com/shokohsc/charts
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/samba-0.2.1/samba-0.2.1.tgz
+    version: 0.2.1
   - apiVersion: v2
     appVersion: latest
     created: "2021-02-18T18:37:30.731884778Z"
@@ -672,6 +848,22 @@ entries:
   sftp:
   - apiVersion: v2
     appVersion: latest
+    created: "2021-03-14T22:55:24.328910438Z"
+    description: A Helm chart for Kubernetes
+    digest: 4e25ab8264d9bf8dbd9ac2488268cc90bd0bd31cf91646f7c7a9b4b3d25f523a
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: sftp
+    sources:
+    - https://github.com/shokohsc/charts
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/sftp-0.2.1/sftp-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: latest
     created: "2021-02-18T18:37:30.830967751Z"
     description: A Helm chart for Kubernetes
     digest: f5372225d24795a24947e6a31000ad0bb239c39f60162b741e5273e1ce18d803
@@ -699,6 +891,22 @@ entries:
     - https://github.com/shokohsc/charts/releases/download/sftp-0.1.0/sftp-0.1.0.tgz
     version: 0.1.0
   symfony:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2021-03-14T22:55:24.443635809Z"
+    description: A Helm chart for Kubernetes
+    digest: 1c07487068206ef452cebd7e95d207a42f27b95918ddbb66d45571759e545f14
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: symfony
+    sources:
+    - https://github.com/shokohsc/charts
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/symfony-0.2.1/symfony-0.2.1.tgz
+    version: 0.2.1
   - apiVersion: v2
     appVersion: latest
     created: "2021-02-18T18:37:30.962981181Z"
@@ -730,6 +938,22 @@ entries:
   theia:
   - apiVersion: v2
     appVersion: 1.10.0
+    created: "2021-03-14T22:55:24.531396558Z"
+    description: A Helm chart for Kubernetes
+    digest: e2c0f9531d7e934335e61b1fa9128d3baab97cb431c6639679b06be4bf9bbfd8
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: theia
+    sources:
+    - https://github.com/shokohsc/charts
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/theia-0.2.1/theia-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: 1.10.0
     created: "2021-02-18T18:37:31.056497928Z"
     description: A Helm chart for Kubernetes
     digest: 4ebc42fd58c1d96b47ad47f27fa9d6c024a331c43c924bff88f436d779e2e9ab
@@ -759,6 +983,22 @@ entries:
   thelounge:
   - apiVersion: v2
     appVersion: 4.2.0
+    created: "2021-03-14T22:55:24.646461942Z"
+    description: A Helm chart for Kubernetes
+    digest: 8405ca54fe42fec8c61bae78916b1ea545955f9a771fe990fd00bb8b03593243
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: thelounge
+    sources:
+    - https://github.com/shokohsc/charts
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/thelounge-0.2.1/thelounge-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: 4.2.0
     created: "2021-02-18T18:37:31.149753773Z"
     description: A Helm chart for Kubernetes
     digest: 5db4650edcc145aeb5c34b7872f88ff9c978bb77e198dd5da6e45932265df5b8
@@ -786,6 +1026,27 @@ entries:
     - https://github.com/shokohsc/charts/releases/download/thelounge-0.1.0/thelounge-0.1.0.tgz
     version: 0.1.0
   wekan:
+  - apiVersion: v2
+    appVersion: v4.96
+    created: "2021-03-14T22:55:24.764334843Z"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.3.3
+    description: A Helm chart for Kubernetes
+    digest: 8cac44dbfbb88972f8853f2b15e5962efe889c99446726b13707fc1300a77963
+    home: https://shokohsc.github.io/charts/
+    maintainers:
+    - email: shokohsc@gmail.com
+      name: shokohsc
+    name: wekan
+    sources:
+    - https://github.com/shokohsc/charts
+    type: application
+    urls:
+    - https://github.com/shokohsc/charts/releases/download/wekan-0.3.0/wekan-0.3.0.tgz
+    version: 0.3.0
   - apiVersion: v2
     appVersion: v4.96
     created: "2021-02-18T18:37:31.256504383Z"
