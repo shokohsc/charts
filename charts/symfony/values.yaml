@@ -91,7 +91,7 @@ nginx:
     # nginx.image.repository -- nginx image repository
     repository: nginx
     # nginx.image.tag -- nginx image tag
-    tag: "1.19"
+    tag: "1.20"
   # nginx.envVars -- nginx container environment variables
   envVars: {}
   # nginx.extraVolumes -- nginx container extra volumes
