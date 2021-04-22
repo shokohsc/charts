@@ -1,8 +1,0 @@
----
-extraVolumes:
-  volumeMounts:
-    - name: config
-      mountPath: /config
-  volumes:
-    - name: config
-      emptyDir: {}

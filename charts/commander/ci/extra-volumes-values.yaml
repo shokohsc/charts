@@ -1,8 +1,0 @@
----
-extraVolumes:
-  volumeMounts:
-    - name: data
-      mountPath: /mnt/data
-  volumes:
-    - name: data
-      emptyDir: {}

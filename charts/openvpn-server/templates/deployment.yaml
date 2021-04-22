@@ -151,7 +151,7 @@ metadata:
   name: {{ include "openvpn-server.fullname" . }}-{{ include "openvpn-server.fallbackProtocol" . }}
   labels: {{- include "openvpn-server.labels" . | nindent 4 }}
   annotations:
-    helm.sh/hook: post-install
+    helm.sh/hook-weight: "4"
     {{- with .Values.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}

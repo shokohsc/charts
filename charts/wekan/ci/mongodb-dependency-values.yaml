@@ -1,8 +1,0 @@
----
-mongodb:
-  enabled: true
-  useStatefulSet: true
-  auth:
-    enabled: false
-  directoryPerDB: true
-  nameOverride: mongodb

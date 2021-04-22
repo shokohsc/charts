@@ -1,8 +1,0 @@
----
-extraVolumes:
-  volumeMounts:
-    - name: data
-      mountPath: /var/opt/thelounge
-  volumes:
-    - name: data
-      emptyDir: {}
