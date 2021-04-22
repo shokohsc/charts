@@ -1,0 +1,21 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ include "duckdns.fullname" . }}-duckdns-script
+data:
+  duckdns.sh: |
+    #!/bin/bash
+    set -e
+
+    actual_ipv4=$(dig +short TXT o-o.myaddr.l.google.com @ns3.google.com |sed 's/\"//g')
+    echo "My ipv4: ${actual_ipv4}"
+    IFS=',' read -r -a subdomains <<< "${SUBDOMAINS}"
+    for subdomain in "${subdomains[@]}"
+    do
+      echo "Checking ${subdomain}"
+      registered_ipv4=$(dig +short ${subdomain}.duckdns.org @1.1.1.1)
+      if [[ $registered_ipv4 != $actual_ipv4 ]]; then
+        echo "Registering ${subdomain} with ipv4 ${registered_ipv4}"
+        curl "https://www.duckdns.org/update?domains=$SUBDOMAINS&token=$TOKEN&verbose=true&ip="
+      fi
+    done

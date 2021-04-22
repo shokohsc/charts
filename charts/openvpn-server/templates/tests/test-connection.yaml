@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "openvpn-server.fullname" . }}-test-connection"
+  labels:
+    {{- include "openvpn-server.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: "test"
+    helm.sh/hook-weight: "5"
+spec:
+  containers:
+    - name: resolv-conf
+      image: busybox
+      command: ['cat']
+      args: ['/etc/resolv.conf']
+    {{- if or (eq "tcp" (.Values.service.protocol | lower)) .Values.service.fallback }}
+    - name: nc-tcp
+      image: busybox
+      command: ['nc']
+      args: ['-v', '-z', '{{ include "openvpn-server.fullname" . }}-tcp', '{{ .Values.service.port }}']
+    {{- end }}
+    {{- if or (eq "udp" (.Values.service.protocol | lower)) .Values.service.fallback }}
+    - name: nc-udp
+      image: busybox
+      command: ['nc']
+      args: ['-v', '-z', '-u', '{{ include "openvpn-server.fullname" . }}-udp', '{{ .Values.service.port }}']
+    {{- end }}
+  restartPolicy: Never

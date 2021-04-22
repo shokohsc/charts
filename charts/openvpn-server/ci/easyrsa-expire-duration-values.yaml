@@ -1,0 +1,5 @@
+---
+easyrsa:
+  caExpire: 90
+  certExpire: 45
+  crlDays: 45

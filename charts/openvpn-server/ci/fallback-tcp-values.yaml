@@ -1,0 +1,4 @@
+---
+service:
+  protocol: UDP
+  fallback: true
