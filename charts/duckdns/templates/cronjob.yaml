@@ -1,0 +1,43 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "duckdns.fullname" . }}
+spec:
+  schedule: {{ .Values.cronjob.schedule | quote }}
+  successfulJobsHistoryLimit: {{ .Values.cronjob.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.cronjob.failedJobsHistoryLimit }}
+  startingDeadlineSeconds: {{ .Values.cronjob.startingDeadlineSeconds }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: {{ include "duckdns.fullname" . }}
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+            env:
+              - name: SUBDOMAINS
+                value: {{ .Values.subDomains }}
+              - name: TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    key: {{ .Values.secret.tokenKey | default "token" }}
+                    name: {{ .Values.secret.existingSecret | default (include "duckdns.token-secret" .) }}
+              {{- range $name, $value := .Values.extraEnvVars }}
+              - name: {{ $name | quote }}
+                value: {{ $value | quote }}
+              {{- end }}
+            command:
+              - /bin/sh
+              - -c
+            args:
+              - /tmp/duckdns.sh
+            volumeMounts:
+              - name: {{ include "duckdns.fullname" . }}-duckdns-script
+                mountPath: /tmp/duckdns.sh
+                subPath: duckdns.sh
+          restartPolicy: {{ .Values.cronjob.restartPolicy }}
+          volumes:
+            - name: {{ include "duckdns.fullname" . }}-duckdns-script
+              configMap:
+                name: {{ include "duckdns.fullname" . }}-duckdns-script
+                defaultMode: 0755
