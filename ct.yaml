@@ -4,5 +4,6 @@ remote: origin
 chart-dirs:
   - charts
 chart-repos:
+  - k8s-at-home=https://k8s-at-home.com/charts
   - bitnami=https://charts.bitnami.com/bitnami
-helm-extra-args: --timeout 120s
+helm-extra-args: --timeout 180s
